@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Tooling
+.gstack/
+.versions/
+.gate-pending/
+
+# Agent artifacts (ephemeral, safe to delete)
+agent-artifacts/
+
+# Large example assets (lesson materials can be regenerated)
+# examples/python-60day/*.ipynb  -- uncomment if notebooks are large

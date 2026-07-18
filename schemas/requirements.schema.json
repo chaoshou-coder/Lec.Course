@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "requirements.schema",
+  "description": "DISCOVER 态产出:课程需求定义,由 /course-discover 生成",
+  "type": "object",
+  "required": ["target_capability", "current_level", "daily_hours", "depth_goal", "acceptance_criteria", "research_grounded"],
+  "properties": {
+    "target_capability": {
+      "type": "string",
+      "description": "终点能力,一句话,可验证(如'用 HuggingFace LoRA 微调一个文本分类模型')",
+      "minLength": 10
+    },
+    "current_level": {
+      "type": "string",
+      "description": "学员当前水平(起点),列出已掌握的关键知识点",
+      "minLength": 5
+    },
+    "daily_hours": {
+      "type": "number",
+      "description": "每日可用学习时长(小时)",
+      "minimum": 0.5,
+      "maximum": 24
+    },
+    "depth_goal": {
+      "type": "string",
+      "enum": ["了解", "能写", "能教", "能优化"],
+      "description": "深度目标:决定 DAG 每个节点的最低要求标注和剪枝边界"
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "description": "验收标准列表(>=3 条),每项用'给定 X, 能产出 Y'格式,可独立判定",
+      "items": { "type": "string", "minLength": 10 },
+      "minItems": 3
+    },
+    "constraints": {
+      "type": "array",
+      "description": "限制条件(时间/语言/工具偏好)",
+      "items": { "type": "string" }
+    },
+    "research_grounded": {
+      "type": "boolean",
+      "description": "研究加持是否成功。false = web_search 不可用,降级为纯 LLM 推理"
+    },
+    "reference_courses": {
+      "type": "array",
+      "description": "DISCOVER 态找到的参照课程列表(用于 PLAN 态 gold-set)",
+      "items": {
+        "type": "object",
+        "required": ["name", "source"],
+        "properties": {
+          "name": { "type": "string" },
+          "source": { "type": "string", "description": "URL 或出处" },
+          "syllabus_extracted": { "type": "boolean" }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

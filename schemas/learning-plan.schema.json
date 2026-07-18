@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "learning-plan.schema",
+  "description": "PLAN 态产出:从 DAG 推理出的学习计划,由 /course-plan 生成",
+  "type": "object",
+  "required": ["dag_nodes", "dag_edges", "topological_order", "pruned_branches", "lesson_plan"],
+  "properties": {
+    "dag_nodes": {
+      "type": "array",
+      "description": "知识依赖图节点",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "granularity", "min_requirement"],
+        "properties": {
+          "id": { "type": "string", "description": "节点唯一标识" },
+          "label": { "type": "string", "description": "知识点名称" },
+          "granularity": { "type": "string", "enum": ["操作级", "理解级"], "description": "按 01 方法论" },
+          "min_requirement": {
+            "type": "string",
+            "enum": ["了解", "能写", "能教", "能优化"],
+            "description": "与 requirements.md depth_goal 枚举一致"
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "dag_edges": {
+      "type": "array",
+      "description": "依赖边",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "strength"],
+        "properties": {
+          "from": { "type": "string", "description": " dag_nodes[].id" },
+          "to": { "type": "string", "description": " dag_nodes[].id" },
+          "strength": { "type": "string", "enum": ["strong", "weak", "parallel"] },
+          "note": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "topological_order": {
+      "type": "array",
+      "description": "拓扑排序,同层节点可并行(安排在同一天)",
+      "items": {
+        "type": "array",
+        "items": { "type": "string", "description": "dag_nodes[].id" }
+      },
+      "minItems": 1
+    },
+    "pruned_branches": {
+      "type": "array",
+      "description": "被裁剪的枝及理由(裁剪规则:从终点能力不可达)",
+      "items": {
+        "type": "object",
+        "required": ["node", "reason"],
+        "properties": {
+          "node": { "type": "string" },
+          "reason": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "lesson_plan": {
+      "type": "array",
+      "description": "按天编排的学习计划",
+      "items": {
+        "type": "object",
+        "required": ["day", "nodes", "daily_goal", "estimated_hours"],
+        "properties": {
+          "day": { "type": "integer", "minimum": 1 },
+          "nodes": {
+            "type": "array",
+            "items": { "type": "string", "description": "dag_nodes[].id" },
+            "minItems": 1
+          },
+          "daily_goal": { "type": "string", "minLength": 5 },
+          "estimated_hours": { "type": "number", "minimum": 0 },
+          "parallelism_broken": {
+            "type": "boolean",
+            "description": "因超出 daily_hours 被拆分的层"
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": false
+}

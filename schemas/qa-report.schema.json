@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "qa-report.schema",
+  "description": "QA 态产出:独立 subagent 的验收报告,由 /course-qa 生成",
+  "type": "object",
+  "required": ["target_artifacts", "criteria_checked", "findings", "structural_check", "overall_verdict", "recommended_action"],
+  "properties": {
+    "target_artifacts": {
+      "type": "array",
+      "description": "被审产物的路径列表",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "criteria_checked": {
+      "type": "array",
+      "description": "验收标准复述(从 requirements.md acceptance_criteria 继承)",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "findings": {
+      "type": "array",
+      "description": "逐项判定",
+      "items": {
+        "type": "object",
+        "required": ["artifact", "criterion", "verdict", "severity", "detail"],
+        "properties": {
+          "artifact": { "type": "string" },
+          "criterion": { "type": "string" },
+          "verdict": { "type": "string", "enum": ["pass", "fail", "partial"] },
+          "severity": { "type": "string", "enum": ["blocker", "major", "minor"] },
+          "detail": { "type": "string", "minLength": 10 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "structural_check": {
+      "type": "object",
+      "description": "结构检查:所有产物文件存在 + 格式符合排版规范",
+      "required": ["passed"],
+      "properties": {
+        "passed": { "type": "boolean" },
+        "details": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "overall_verdict": {
+      "type": "string",
+      "enum": ["pass", "fail", "pass-with-minors"],
+      "description": "整体判定"
+    },
+    "recommended_action": {
+      "type": "object",
+      "description": "建议动作:type 决定控制流分支,target = 具体哪课重制/plan 哪个节点重排",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["ship", "rebuild-lesson", "rebuild-plan", "redo-discover"]
+        },
+        "target": {
+          "type": "string",
+          "description": "例: 'lesson03' 或 'dag_node_n5'"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
