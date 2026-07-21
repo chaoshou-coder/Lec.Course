@@ -99,6 +99,19 @@
 - 无共享 mutable state,不写共享 manifest
 - 失败的 lesson 单独重跑
 
+**BUILD 自检清单(v1.3 R12):**
+
+每个 lesson 产出后,BUILD 必须对照 PLAN 的 pedagogy_notes 自检:
+
+| 自检项 | 检查方式 |
+|--------|---------|
+| pedagogy_notes 落地 | notes.md 中哪里体现了 PLAN 标注的编排原则? |
+| teaching_method 触发 | 标了 ncdl 的节点是否有 Break It 段? 标了 consumer_gate 的节点是否有消费者函数? |
+| 明日衔接 | notes.md 末尾是否有"明日衔接"段? |
+| 8 步循环 | 痛点/类比/解释/ASCII/执行过程/常见错误/学员代码区/参考答案 是否都在? |
+
+自检结果写入 `course/lessonXX/README.md` 的"BUILD 自检"段。
+
 **转移:** 所有 lesson 完成 → `QA`
 
 ---
@@ -112,6 +125,18 @@
    - **结构检查**(无需深领域知识): 所有产物文件存在、格式符合 `05-production-standards.md`
    - **内容正确性**(需要领域推理): 对照 `acceptance_criteria` 判定是否达成目标
 4. 产出 `output/qa-report.json`,用 `scripts/validate.py` 校验
+
+**QA 跨阶段对照(v1.3 R12):**
+
+QA 不仅查 BUILD 产出,还要对照上游阶段:
+
+| 对照项 | 检查方式 |
+|--------|---------|
+| PLAN pedagogy_notes → BUILD 落地 | Day 1 标了"工具先行",notes.md 是否有可运行代码? |
+| DISCOVER criteria → BUILD 覆盖 | 每条 acceptance_criteria 是否都有对应练习? |
+| teaching_method → 内容 | 标 ncdl 的节点是否有 Break It 段? |
+
+对照结果写入 qa-report.json 的 `structural_check.details`。
 
 **硬关卡(唯一硬性关卡):**
 - `overall_verdict == pass` → `DONE`

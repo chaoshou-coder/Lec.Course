@@ -430,3 +430,27 @@ methodology/02-build-knowledge-dag.md:
 v1.1 skill 在全新领域(Web Scraping)表现良好,全流程无需额外调整即可跑通。
 8 轮 micro-cycle 迭代(累积 R1-R11)验证了 skill 的通用性和稳定性。
 
+
+---
+
+## R12: JS 基础 × 跨阶段验证
+
+**日期:** 2026-07-21
+**测试用例:** JavaScript 基础(完整 3 天课程)
+**能力点:** 跨阶段一致性验证
+**产出:** `output/iter-R12-js-cross-phase/cross-phase-report.md`
+**校验:** ✅ 全部对齐
+
+### 跨阶段对齐结果
+
+| 阶段对齐 | 结果 |
+|---------|------|
+| DISCOVER → PLAN | ✅ 全部 criteria/scenario 有对应节点 |
+| PLAN → BUILD | ✅ 全部 pedagogy_notes 落地 |
+| BUILD → QA | ❌ QA 缺少跨阶段对照 |
+
+### 改进
+
+- SKILL.md BUILD 段:新增"BUILD 自检清单"(对照 PLAN pedagogy_notes)
+- SKILL.md QA 段:新增"QA 跨阶段对照"(对照 PLAN + DISCOVER)
+
