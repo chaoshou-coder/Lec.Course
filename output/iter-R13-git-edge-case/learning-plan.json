@@ -1,0 +1,75 @@
+{
+  "dag_nodes": [
+    { "id": "g1", "label": "Git 是什么 + 初始化与配置", "granularity": "理解级", "min_requirement": "能写" },
+    { "id": "g2", "label": "日常工作循环(add/commit/status/diff/log)", "granularity": "操作级", "min_requirement": "能写" },
+    { "id": "g3", "label": "分支管理(创建/切换/合并/删除)", "granularity": "操作级", "min_requirement": "能写", "teaching_method": "ncdl" },
+    { "id": "g4", "label": "合并冲突处理(诊断/解决/标记)", "granularity": "操作级", "min_requirement": "能写", "teaching_method": "ncdl" },
+    { "id": "g5", "label": "GitHub 协作(push/pull/PR/merge)", "granularity": "操作级", "min_requirement": "能写" },
+    { "id": "g6", "label": "综合实战:从需求到 PR", "granularity": "操作级", "min_requirement": "能教" }
+  ],
+  "dag_edges": [
+    { "from": "g1", "to": "g2", "strength": "strong", "note": "装好配置后才能开始工作" },
+    { "from": "g2", "to": "g3", "strength": "strong", "note": "会日常工作后才能学分支" },
+    { "from": "g3", "to": "g4", "strength": "strong", "note": "分支后才遇到合并冲突" },
+    { "from": "g3", "to": "g5", "strength": "strong", "note": "会分支后才能协作" },
+    { "from": "g4", "to": "g6", "strength": "strong", "note": "会解决冲突才能实战" },
+    { "from": "g5", "to": "g6", "strength": "strong", "note": "会协作才能实战" }
+  ],
+  "topological_order": [
+    ["g1"],
+    ["g2"],
+    ["g3"],
+    ["g4"],
+    ["g5"],
+    ["g6"]
+  ],
+  "pruned_branches": [
+    { "node": "Git 内部原理(object model/SHA-1)", "reason": "日常使用不可达,属于进阶主题" },
+    { "node": "高级操作(rebase/cherry-pick)", "reason": "v1 范围不可达,属于 v2 进阶" },
+    { "node": "Git 工作流(Git Flow/Trunk-Based)", "reason": "概念提及即可,深入属于进阶" },
+    { "node": "多仓库管理(submodule)", "reason": "日常使用不可达" }
+  ],
+  "pruning_review_required": true,
+  "lesson_plan": [
+    {
+      "day": 1,
+      "label": "Git 基础概念与初始化",
+      "nodes": ["g1"],
+      "daily_goal": "理解 Git 是什么,完成初始化和基本配置",
+      "estimated_hours": 1.5,
+      "pedagogy_notes": "工具先行:Day 1 就跑通 git init + 第一次 commit"
+    },
+    {
+      "day": 2,
+      "label": "日常工作循环",
+      "nodes": ["g2"],
+      "daily_goal": "能独立完成 add/commit/status/diff/log",
+      "estimated_hours": 1.5,
+      "pedagogy_notes": "脚手架递进:在 Day 1 基础上练习日常工作"
+    },
+    {
+      "day": 3,
+      "label": "分支管理",
+      "nodes": ["g3"],
+      "daily_goal": "能创建/切换/合并分支",
+      "estimated_hours": 1.5,
+      "pedagogy_notes": "NCDL:展示'在主分支直接开发'的反模式"
+    },
+    {
+      "day": 4,
+      "label": "合并冲突处理",
+      "nodes": ["g4"],
+      "daily_goal": "能诊断并解决合并冲突",
+      "estimated_hours": 1.5,
+      "pedagogy_notes": "NCDL:故意制造冲突,让学员解决"
+    },
+    {
+      "day": 5,
+      "label": "GitHub 协作与综合实战",
+      "nodes": ["g5", "g6"],
+      "daily_goal": "能独立完成 push/PR/merge,完成一个综合实战",
+      "estimated_hours": 2,
+      "pedagogy_notes": "螺旋复访:g1-g5 知识全部整合"
+    }
+  ]
+}
