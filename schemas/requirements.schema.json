@@ -11,9 +11,14 @@
       "minLength": 10
     },
     "current_level": {
-      "type": "string",
-      "description": "学员当前水平(起点),列出已掌握的关键知识点",
-      "minLength": 5
+      "type": "object",
+      "description": "学员当前水平(起点),二维拆分:主题深度 vs 工具熟练度",
+      "required": ["topic_depth", "tool_fluency"],
+      "properties": {
+        "topic_depth": { "type": "string", "description": "对本主题的知识深度(如'零基础'/'了解概念'/'能写简单代码')" },
+        "tool_fluency": { "type": "string", "description": "对相关工具的熟练度(如'不会用 VS Code'/'熟悉终端')" }
+      },
+      "additionalProperties": false
     },
     "daily_hours": {
       "type": "number",
@@ -69,6 +74,30 @@
           "syllabus_extracted": { "type": "boolean" }
         }
       }
+    },
+    "reference_resources": {
+      "type": "array",
+      "description": "参考资料(博客/视频/awesome-list 等非结构化资源)",
+      "items": {
+        "type": "object",
+        "required": ["name", "source", "type"],
+        "properties": {
+          "name": { "type": "string" },
+          "source": { "type": "string" },
+          "type": { "type": "string", "enum": ["blog", "video", "awesome_list", "docs"], "description": "资源类型" }
+        }
+      }
+    },
+    "success_scenarios": {
+      "type": "array",
+      "description": "学完后的真实使用场景(3-5 个),描述学员会自然做什么",
+      "items": { "type": "string", "minLength": 10 },
+      "minItems": 3
+    },
+    "scope_out_of_v1": {
+      "type": "array",
+      "description": "明确不在 v1 范围的能力(从 target_capability 收敛后剩下的)",
+      "items": { "type": "string" }
     }
   },
   "additionalProperties": false

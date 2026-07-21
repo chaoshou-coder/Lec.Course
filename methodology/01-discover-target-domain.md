@@ -175,6 +175,29 @@ DISCOVER 必须明确:**这是一个独立主题,还是某个路径的第 N 步?
 
 **为什么:** R1 的 constraints 写了"浏览器控制台或 Node.js"但未明确推荐,这会给 BUILD 阶段带来歧义 —— 练习设计需要知道运行环境。
 
+### 6.5 target_capability 必须收敛(v1.1 R4)
+
+target_capability 限 ≤3 个核心能力。超出部分写进 `scope_out_of_v1` 字段(明确不在 v1 范围)。
+
+**为什么:** R4 发现 Claude Code 的 target_capability 写了 5 件能力(派任务/调用 subagent/读 CLAUDE.md/设计 skill/诊断错误),2 周入门课装不下。收敛后更聚焦。
+
+### 6.6 理解层 criteria 不用"背诵"(v1.1 R4)
+
+acceptance_criteria 的"理解层"必须用以下形式:
+- ✅ `**能用类比向新手解释**`(如"能用'贴标签盒子'类比向没学过编程的人解释变量")
+- ✅ `**能预测...会因...而失败**`(如"能预测 var 在 if 块里声明会被 hoisting 到函数级")
+- ❌ ~~"能背诵/列出 N 条..."~~(机械背诵不等于真理解)
+
+### 6.7 必须写 success_scenarios(v1.1 R4)
+
+`success_scenarios` 字段:3-5 个具体场景,描述"学完后学员会自然做什么"。
+
+示例(变量主题):
+- "遇到'需要累加计数'的场景,会选 let 而不是 const"
+- "看到 `const arr = []; arr.push(1)` 不会惊讶,知道 const 不是完全冻结"
+
+**为什么:** 让 QA 验收不只看"能不能背诵",而是看"能不能在真实场景中正确运用"。
+
 ---
 
 ## 交叉参考

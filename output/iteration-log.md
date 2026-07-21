@@ -278,3 +278,67 @@ methodology/02-build-knowledge-dag.md:
 4. QA 增加"学员视角"评估:练习难度是否匹配目标学员水平
 
 **note:** 继续累积,等 R8 一起统一应用。
+
+---
+
+## R8: JS 基础 × 全流程(DISCOVER → PLAN → BUILD)
+
+**日期:** 2026-07-21
+**测试用例:** JavaScript 基础(变量 + 作用域 + 场景选择)
+**能力点:** 全流程端到端验证
+**产出:**
+- `output/iter-R8-js-full-pipeline/requirements.json`(DISCOVER)
+- `output/iter-R8-js-full-pipeline/learning-plan.json`(PLAN)
+- `output/iter-R8-js-full-pipeline/course/lesson01/`(BUILD Day 1,11 文件)
+**校验:** ✅ 全部 schema 通过
+
+### 7 轮改进的批量应用
+
+**schema/requirements.json 改进(R1 + R4):**
+- ✅ learner_persona(age_stage/background/motivation)
+- ✅ topic_type(独立主题)
+- ✅ current_level 拆 topic_depth + tool_fluency
+- ✅ acceptance_criteria 覆盖 3 个认知层级(理解/应用/分析)
+- ✅ reference_courses vs reference_resources 分离
+- ✅ success_scenarios(4 个真实场景)
+- ✅ scope_out_of_v1(3 项明确不在 v1)
+
+**schema/learning-plan.json 改进(R2 + R5):**
+- ✅ teaching_method per node(v3/v4/v5=ncdl, v6=consumer_gate)
+- ✅ pedagogy_notes per day(工具先行/NCDL/消费者门控)
+- ✅ label per day(友好主题名)
+- ✅ pruning_review_required=true
+
+**SKILL.md + methodology 改进(R3):**
+- ✅ 教学法触发表(ncdl/dual_layer/consumer_gate 对应内容)
+- ✅ 文件后缀匹配(.js 用于 JS 课程)
+- ✅ 明日衔接段(notes.md 末尾)
+
+### 评估发现
+
+✅ 改进效果:
+- DISCOVER 产出聚焦(≤3 核心能力 + scope_out_of_v1)
+- PLAN 的 DAG 教学法标注清晰,每课 pedagogy_notes 可见
+- BUILD 文件用 .js 后缀(不再 .py),notes.md 含明日衔接段
+- 理解层 criteria 用"类比/预测失败"形式(不再背诵)
+
+❌ 残留问题(下一步优化):
+
+1. **BUILD 没有验证 PLAN 的 pedagogy_notes** —— R7 发现 QA 应验证,但 BUILD 也应自检。当前 BUILD 产出了 notes.md,但没有对照 PLAN 的 pedagogy_notes 做自检清单。
+
+2. **R3 教学触发在 Day 1 没体现** —— Day 1 的 v1/v2 没标 teaching_method,所以没触发特殊教学法。Day 2(v3-v5 标 ncdl)和 Day 3(v6 标 consumer_gate)会触发,但本次只做了 Day 1,无法验证触发是否真的工作。
+
+3. **iteration-log 过长** —— 8 轮迭代 log 已经很长,后续新增迭代需要更紧凑的记录格式。
+
+### 整体结论
+
+8 轮 micro-cycle 迭代共发现 **26 个 skill 缺陷**,全部修复或记录。改进覆盖:
+- methodology/01(DISCOVER 质量要求 6 个新增节)
+- methodology/02(PLAN 教学法标注 3 个新增节)
+- methodology/05(BUILD 明日衔接 + 文件后缀)
+- schemas/requirements(7 个新字段)
+- schemas/learning-plan(4 个新字段)
+- skills/course-agent/SKILL.md(教学法触发表)
+
+**skill 从 v1.0 演化到 v1.1,质量显著提升。**
+
