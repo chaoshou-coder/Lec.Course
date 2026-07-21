@@ -1,3 +1,0 @@
--- [难度: ★★][所属知识点: ORDER BY][预计完成时间: 10 分钟]
--- 题目:按 price 降序排列,取前 5 个
--- 参考答案:SELECT name, price FROM products ORDER BY price DESC LIMIT 5;

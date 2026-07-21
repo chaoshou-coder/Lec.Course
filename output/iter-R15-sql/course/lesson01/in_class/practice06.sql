@@ -1,5 +1,0 @@
--- [难度: ★★★][所属知识点: 挑战题][预计完成时间: 15 分钟]
--- 题目:下面 SQL 有什么问题?如何修正?
--- SELECT name, price FROM products WHERE price > AVG(price)
--- 问题:WHERE 不能直接用聚合函数
--- 修正:SELECT name, price FROM products WHERE price > (SELECT AVG(price) FROM products)

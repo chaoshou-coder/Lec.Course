@@ -1,3 +1,0 @@
--- [难度: ★★★★][所属知识点: 综合][预计完成时间: 30 分钟][类型: 选做]
--- 题目:查询消费总额 Top 10 的用户(需要 JOIN users 和 orders 表)
--- 参考答案:SELECT u.name, SUM(o.amount) AS total FROM users u JOIN orders o ON u.id = o.user_id GROUP BY u.id, u.name ORDER BY total DESC LIMIT 10;

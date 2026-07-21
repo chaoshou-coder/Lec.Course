@@ -1,3 +1,0 @@
--- [难度: ★][所属知识点: 指定列][预计完成时间: 5 分钟]
--- 题目:查询 name 和 price 列
--- 参考答案:SELECT name, price FROM products;

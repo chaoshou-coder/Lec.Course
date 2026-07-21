@@ -1,3 +1,0 @@
--- [难度: ★★★][所属知识点: 综合][预计完成时间: 20 分钟][类型: 选做]
--- 题目:查询每个分类的平均价格,按平均价格降序排列
--- 参考答案:SELECT category, AVG(price) AS avg_price FROM products GROUP BY category ORDER BY avg_price DESC;

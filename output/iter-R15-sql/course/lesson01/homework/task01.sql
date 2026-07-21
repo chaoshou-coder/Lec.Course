@@ -1,5 +1,0 @@
--- [难度: ★★★][所属知识点: 修复错误][预计完成时间: 15 分钟][类型: 选做]
--- 题目:下面 SQL 有 2 处错误,找出来
--- SELECT name, price, FROM products WHERE price > 100 ORDER BY price
--- 错误 1:price 后面多逗号
--- 错误 2:ORDER BY 应该指定 ASC/DESC

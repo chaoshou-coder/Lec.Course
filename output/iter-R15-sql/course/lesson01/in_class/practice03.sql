@@ -1,3 +1,0 @@
--- [难度: ★★][所属知识点: WHERE][预计完成时间: 8 分钟]
--- 题目:查询 price > 100 的产品
--- 参考答案:SELECT name, price FROM products WHERE price > 100;

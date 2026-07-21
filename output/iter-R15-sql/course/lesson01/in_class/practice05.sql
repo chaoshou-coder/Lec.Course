@@ -1,3 +1,0 @@
--- [难度: ★★★][所属知识点: 综合][预计完成时间: 15 分钟]
--- 题目:查询每个分类的产品数量(用 COUNT + GROUP BY)
--- 参考答案:SELECT category, COUNT(*) FROM products GROUP BY category;
