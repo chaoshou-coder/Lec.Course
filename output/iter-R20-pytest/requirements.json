@@ -1,0 +1,56 @@
+{
+  "target_capability": "能用 pytest 编写单元测试:fixture/parametrize/mock,理解测试金字塔,并为现有代码补写测试",
+  "scope_out_of_v1": [
+    "hypothesis 属性测试",
+    "coverage.py 覆盖率分析",
+    "CI/CD 中的测试集成",
+    "测试设计模式(AAA/Given-When-Then)"
+  ],
+  "learner_persona": {
+    "age_stage": "在职开发者",
+    "background": "3 年以上 Python 经验,写过 `assert` 但没用过 pytest。测试是`写完代码后补的`,不知道 fixture/mock 是什么。",
+    "motivation": "工作:团队要求单元测试覆盖率 80%,但没人教。个人:想学会`正确的测试`而不是随便写 assert。"
+  },
+  "topic_type": "独立主题",
+  "current_level": {
+    "topic_depth": "知道 assert,但没用过 pytest。不了解 fixture/mock/parametrize。没听过测试金字塔。",
+    "tool_fluency": "熟悉 Python,会用 pip。但没用过 pytest/unittest。"
+  },
+  "daily_hours": 1.5,
+  "depth_goal": "能写",
+  "acceptance_criteria": [
+    "理解层:能用'考试出卷'类比向新手解释测试(测试 = 考卷,代码 = 学生,CI = 自动阅卷),并预测'只测 happy path'会导致什么问题",
+    "应用层:给定一个函数(如 `calculate_discount`),能用 pytest 编写完整测试(正常/边界/异常)",
+    "分析层:给定一段'伪测试'(测试的是实现细节而不是行为),能识别问题并重构"
+  ],
+  "success_scenarios": [
+    "写新功能时,会考虑'这个怎么测试'而不是写完再补",
+    "遇到'测试太慢',会想到 mock 外部依赖",
+    "遇到'测试不稳定',会检查是否有共享状态(用 fixture 隔离)"
+  ],
+  "constraints": [
+    "运行环境 = Python 3.10+ + pytest 7+",
+    "只教 pytest,不深入 Jest/Mocha",
+    "每天 1.5 小时,约 3-4 天完成"
+  ],
+  "research_grounded": true,
+  "reference_courses": [
+    {
+      "name": "pytest 官方教程",
+      "source": "https://docs.pytest.org/en/stable/getting_started.html",
+      "syllabus_extracted": true
+    },
+    {
+      "name": "pytest 101(Pragmatic AI Labs)",
+      "source": "https://prismlabs.io/pytest-101/",
+      "syllabus_extracted": false
+    }
+  ],
+  "reference_resources": [
+    {
+      "name": "Awesome Python Testing",
+      "source": "https://github.com/mtesting/awesome-python-testing",
+      "type": "awesome_list"
+    }
+  ]
+}

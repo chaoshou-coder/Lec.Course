@@ -1,0 +1,56 @@
+{
+  "target_capability": "能用 Docker 容器化一个 Python/JS 应用:写 Dockerfile、管理镜像和容器、使用 docker-compose 编排多服务",
+  "scope_out_of_v1": [
+    "Docker 网络深入(bridge/host/overlay)",
+    "Kubernetes 编排",
+    "Docker 安全(最小权限/镜像扫描)",
+    "CI/CD 中的 Docker 集成"
+  ],
+  "learner_persona": {
+    "age_stage": "在职开发者",
+    "background": "3 年以上 Python/JS 经验,听过 Docker 但没用过。部署代码靠手动 ssh 到服务器,环境配置靠文档口口相传。",
+    "motivation": "工作:公司要求容器化部署,但没人教。个人:想告别'在我电脑上能跑'的问题。"
+  },
+  "topic_type": "独立主题",
+  "current_level": {
+    "topic_depth": "零基础 Docker —— 知道容器是什么,但没写过 Dockerfile。不会 docker run 以外的命令。",
+    "tool_fluency": "熟悉终端,会用 pip/npm。但没用过虚拟化工具(VirtualBox/Docker)。"
+  },
+  "daily_hours": 2,
+  "depth_goal": "能写",
+  "acceptance_criteria": [
+    "理解层:能用'集装箱'类比向新手解释 Docker(容器 = 标准化集装箱,镜像 = 设计图纸,仓库 = 码头),并预测'为什么 Dockerfile 要分层'",
+    "应用层:给定一个 Python Flask 应用,能写 Dockerfile 并构建镜像、运行容器",
+    "分析层:给定一个构建失败的 Dockerfile(如 COPY 路径错误/依赖缺失),能诊断问题并修正"
+  ],
+  "success_scenarios": [
+    "新建项目时,会先写 Dockerfile 而不是手动配置服务器",
+    "遇到'依赖安装失败',会检查 Dockerfile 的分层顺序",
+    "部署多服务时,会用 docker-compose 而不是手动启多个容器"
+  ],
+  "constraints": [
+    "运行环境 = Docker Desktop(Mac/Windows)或 Docker Engine(Linux)",
+    "只教基础操作,不深入 Kubernetes",
+    "每天 2 小时,约 4-5 天完成"
+  ],
+  "research_grounded": true,
+  "reference_courses": [
+    {
+      "name": "Docker 官方教程",
+      "source": "https://docs.docker.com/get-started/",
+      "syllabus_extracted": true
+    },
+    {
+      "name": "Docker Curriculum",
+      "source": "https://docker-curriculum.com/",
+      "syllabus_extracted": true
+    }
+  ],
+  "reference_resources": [
+    {
+      "name": "Dockerfile 最佳实践",
+      "source": "https://docs.docker.com/develop/develop-images/dockerfile_best-practices/",
+      "type": "docs"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "target_capability": "能理解并实现基础数据结构(数组/链表/栈/队列/哈希表),分析时间复杂度,并选择合适结构解决实际问题",
+  "scope_out_of_v1": [
+    "树与图(二叉树/BST/图的遍历)",
+    "高级数据结构(堆/并查集/Trie)",
+    "动态规划与贪心算法",
+    "各语言标准库实现对比"
+  ],
+  "learner_persona": {
+    "age_stage": "在职开发者",
+    "background": "3 年以上 Python/JS 经验,用过 Array/Object 但没理解底层。面试被刷因为不会写链表反转。知道 O(n) 但不会分析。",
+    "motivation": "工作:需要选择合适的数据结构优化性能。个人:面试要考 CS 基础,想系统补一下。"
+  },
+  "topic_type": "独立主题",
+  "current_level": {
+    "topic_depth": "知道数组/对象怎么用,但没实现过链表/栈。知道大 O 但不会分析循环嵌套。",
+    "tool_fluency": "熟悉 Python/JS,但没用过 typed array / linked list。"
+  },
+  "daily_hours": 2,
+  "depth_goal": "能写",
+  "acceptance_criteria": [
+    "理解层:能用'图书馆书架'类比向新手解释数据结构(数组 = 连续书架,链表 = 散落的书+便签),并预测'为什么数组中间插入是 O(n)'",
+    "应用层:给定一个问题(如'实现 LRU 缓存'),能选择合适的数据结构(哈希表 + 双向链表)并实现",
+    "分析层:给定一段嵌套循环代码,能准确分析时间复杂度,并给出优化方案"
+  ],
+  "success_scenarios": [
+    "遇到'频繁查找'时,会想到哈希表而不是数组遍历",
+    "遇到'后进先出'场景,会想到栈而不是数组",
+    "写循环时,会先想时间复杂度而不是直接写"
+  ],
+  "constraints": [
+    "运行环境 = Python 或 JS 学员自选",
+    "只教基础结构,不深入树/图/动态规划",
+    "每天 2 小时,约 5-6 天完成"
+  ],
+  "research_grounded": true,
+  "reference_courses": [
+    {
+      "name": "VisuAlgo(可视化数据结构)",
+      "source": "https://visualgo.net/",
+      "syllabus_extracted": true
+    },
+    {
+      "name": "Problem Solving with Algorithms and Data Structures using Python",
+      "source": "https://runestone.academy/ns/books/published/pythonds/index.html",
+      "syllabus_extracted": true
+    }
+  ],
+  "reference_resources": [
+    {
+      "name": "Big-O Cheat Sheet",
+      "source": "https://www.bigocheatsheet.com/",
+      "type": "docs"
+    }
+  ]
+}

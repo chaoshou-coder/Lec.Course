@@ -1,0 +1,26 @@
+{
+  "dag_nodes": [
+    { "id": "d1", "label": "Docker 基础(镜像/容器/Dockerfile)", "granularity": "操作级", "min_requirement": "能写" },
+    { "id": "d2", "label": "构建镜像与多阶段构建", "granularity": "操作级", "min_requirement": "能写", "teaching_method": "ncdl" },
+    { "id": "d3", "label": "docker-compose 编排多服务", "granularity": "操作级", "min_requirement": "能写" },
+    { "id": "d4", "label": "实战:容器化一个 Flask 应用", "granularity": "操作级", "min_requirement": "能教" }
+  ],
+  "dag_edges": [
+    { "from": "d1", "to": "d2", "strength": "strong", "note": "会基础才能构建" },
+    { "from": "d2", "to": "d3", "strength": "strong", "note": "会构建才能编排" },
+    { "from": "d3", "to": "d4", "strength": "strong", "note": "会编排才能实战" }
+  ],
+  "topological_order": [["d1"], ["d2"], ["d3"], ["d4"]],
+  "pruned_branches": [
+    { "node": "Docker 网络深入", "reason": "使用层不可达,属于进阶主题" },
+    { "node": "Kubernetes 编排", "reason": "使用层不可达,属于进阶主题" },
+    { "node": "Docker 安全(镜像扫描)", "reason": "使用层不可达,属于进阶主题" }
+  ],
+  "pruning_review_required": true,
+  "lesson_plan": [
+    {"day": 1, "label": "Docker 基础与第一个容器", "nodes": ["d1"], "daily_goal": "能运行容器,理解镜像/容器关系", "estimated_hours": 2, "pedagogy_notes": "工具先行:Day 1 就跑通 docker run/hello-world"},
+    {"day": 2, "label": "构建镜像与 Dockerfile", "nodes": ["d2"], "daily_goal": "能写 Dockerfile 并构建镜像", "estimated_hours": 2, "pedagogy_notes": "NCDL:展示'COPY 路径错误/依赖缺失'反模式"},
+    {"day": 3, "label": "docker-compose 编排", "nodes": ["d3"], "daily_goal": "能用 compose 编排多服务", "estimated_hours": 2, "pedagogy_notes": "脚手架递进:在 Day 2 单容器基础上编排"},
+    {"day": 4, "label": "实战:容器化 Flask 应用", "nodes": ["d4"], "daily_goal": "独立容器化一个真实应用", "estimated_hours": 2, "pedagogy_notes": "螺旋复访:d1-d3 知识全部整合"}
+  ]
+}
