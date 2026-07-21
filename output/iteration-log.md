@@ -163,3 +163,42 @@ methodology/01-discover-target-domain.md:
 
 **note:** R8 后统一起 schema,避免中途多次回滚。
 
+
+---
+
+## R5: Claude Code 使用 × PLAN
+
+**日期:** 2026-07-21
+**测试用例:** Claude Code CLI(工具/元主题)
+**能力点:** PLAN(扒 DAG + 推理路径)
+**产出:** `output/iter-R5-claude-code-plan/learning-plan.json`
+**校验:** ✅ schema 通过 + ✅ topology valid(允许同天强依赖)
+
+### 评估发现
+
+✅ R2 改进在工作:
+- 7 个节点标了 teaching_method(ncdl/dual_layer/c8 综合默认)
+- 6 天都有 pedagogy_notes
+- 4 项剪枝每项都有理由,pruning_review_required=true
+- 友好的 day_label(不是 v1-v6 代号)
+
+❌ 新摩擦点(元主题 PLAN 特化):
+
+1. **教学法选择不稳定** —— c6 subagent 和 c5 tools/MCP 都标 ncdl,但这两个的反模式性质其实不同:c6 失败模式是"并发冲突/上下文丢失",c5 失败模式是"tool 调用权限/MCP 配置错误"。一个通用 'ncdl' 字段不能区分反模式类型。
+
+2. **顶层 node min_requirement 偏高** —— c7/c8/c10 都标"能教",但 2 周入门课学员多数只能到达"能写"。"能教"是更高门槛(能向别人解释),不是初学者能快速达到的状态。
+
+3. **没有"核心工作流"路径** —— DAG 中 c8(实战工作流)只有一个,但 Claude Code 的核心使用模式至少 3 种:重构 / 读陌生 codebase / 加新功能。应该拆开还是合并?DAG 没体现这种决策。
+
+4. **tool_fluency 起点没反映** —— R4 发现 current_level 应拆 tool_fluency + topic_depth,但 PLAN 没有对应的"按起点决定从哪里开始"的规则。
+
+5. **没有 feedback loop 设计** —— 学习 Claude Code 必须"用它做真实项目",但 lesson_plan 没有"用 Claude Code 做一个真实 PR"这类综合驱动项。
+
+### Skill 改进(继续暂记,等 R8 后批量应用)
+
+`methodology/02-build-knowledge-dag.md` 与 `03-design-learning-sequence.md`:
+1. teaching_method 应该扩展枚举:`ncdl_concurrent_conflict` / `ncdl_hallucination` / `ncdl_permission` 等(NCDL 子类)
+2. min_requirement=能教 应仅对 ≥50% 的 days 适用,≤50% 改为"能写"(深度与时间预算匹配)
+3. PLAN 技能加"核心场景路径决策"—— 实战节点应拆或合应有明确判据(复杂 → 拆,简单 → 合)
+
+**note:** 等 R8 一起统一应用,继续累积 friction evidence。

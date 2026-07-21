@@ -1,0 +1,95 @@
+{
+  "dag_nodes": [
+    { "id": "c1", "label": "Claude Code 是什么 + 安装配置", "granularity": "理解级", "min_requirement": "能写" },
+    { "id": "c2", "label": "基本对话模式(终端问答 + 单文件编辑)", "granularity": "操作级", "min_requirement": "能写" },
+    { "id": "c3", "label": "CLAUDE.md 项目级上下文", "granularity": "操作级", "min_requirement": "能写" },
+    { "id": "c4", "label": "slash commands(/review, /plan)", "granularity": "操作级", "min_requirement": "能写" },
+    { "id": "c5", "label": "Tools 与 MCP 协议", "granularity": "理解级", "min_requirement": "能写", "teaching_method": "ncdl" },
+    { "id": "c6", "label": "Subagent 并行委派任务", "granularity": "操作级", "min_requirement": "能写", "teaching_method": "ncdl" },
+    { "id": "c7", "label": "Skill(自定义命令)的设计", "granularity": "操作级", "min_requirement": "能教", "teaching_method": "dual_layer" },
+    { "id": "c8", "label": "实战工作流:重构一个真实模块", "granularity": "操作级", "min_requirement": "能教" },
+    { "id": "c9", "label": "失败模式识别:过度自信/编造 API/漏边界", "granularity": "理解级", "min_requirement": "能教", "teaching_method": "ncdl" },
+    { "id": "c10", "label": "调试:读 CLAUDE.md 输出诊断问题", "granularity": "操作级", "min_requirement": "能写" }
+  ],
+  "dag_edges": [
+    { "from": "c1", "to": "c2", "strength": "strong", "note": "装好才能用" },
+    { "from": "c2", "to": "c3", "strength": "strong", "note": "基础对话后会发现需要项目上下文" },
+    { "from": "c2", "to": "c4", "strength": "strong", "note": "slash commands 是基础对话的延伸" },
+    { "from": "c3", "to": "c7", "strength": "weak", "note": "CLAUDE.md 是 skill 灵感来源" },
+    { "from": "c4", "to": "c6", "strength": "strong", "note": "slash 后才能扩展到 subagent" },
+    { "from": "c5", "to": "c6", "strength": "strong", "note": "理解 tool 才能用 subagent 调 tool" },
+    { "from": "c5", "to": "c7", "strength": "weak", "note": "skill 可以配置它能用哪些 tool" },
+    { "from": "c6", "to": "c8", "strength": "strong", "note": "会派 subagent 才能做实战" },
+    { "from": "c7", "to": "c8", "strength": "strong", "note": "会设计 skill 才能搭实战工作流" },
+    { "from": "c8", "to": "c9", "strength": "weak", "note": "实战后会遇到失败模式" },
+    { "from": "c8", "to": "c10", "strength": "strong", "note": "实战调试需要能读诊断输出" },
+    { "from": "c9", "to": "c10", "strength": "strong", "note": "识别失败模式才能调试" }
+  ],
+  "topological_order": [
+    ["c1"],
+    ["c2"],
+    ["c3", "c4"],
+    ["c5"],
+    ["c6", "c7"],
+    ["c8"],
+    ["c9"],
+    ["c10"]
+  ],
+  "pruned_branches": [
+    { "node": "Claude API 编程调用(非 CLI)", "reason": "从终点能力(CLI 日常使用)不可达,属于 API 集成独立主题" },
+    { "node": "Hooks 系统编程", "reason": "CLI 用户层不可达,需要 plugin 开发,属于 v2 进阶" },
+    { "node": "具体 MCP 服务器配置(数据库/jira 等)", "reason": "概念已覆盖,具体配置属于参考资源而非主流程" },
+    { "node": "Agent SDK 与多 agent 编排", "reason": "日常使用不可达,属于高级编程主题" }
+  ],
+  "pruning_review_required": true,
+  "lesson_plan": [
+    {
+      "day": 1,
+      "label": "认识与启动 Claude Code",
+      "nodes": ["c1", "c2"],
+      "daily_goal": "能在 macOS/Linux 终端装好 Claude Code 并完成第一次对话",
+      "estimated_hours": 1.5,
+      "pedagogy_notes": "工具先行:Day 1 就跑通第一个对话,概念放最后"
+    },
+    {
+      "day": 2,
+      "label": "项目上下文与快捷命令",
+      "nodes": ["c3", "c4"],
+      "daily_goal": "会写 CLAUDE.md 让 agent 知道你的项目,会用 /review 等 slash command",
+      "estimated_hours": 1.5,
+      "pedagogy_notes": "脚手架递进:文件上下文 → 命令,每节只引入一个新抽象"
+    },
+    {
+      "day": 3,
+      "label": "Tools 与 Subagent 基础",
+      "nodes": ["c5", "c6"],
+      "daily_goal": "理解 tool/MCP 是什么,能用 subagent 并行委派任务",
+      "estimated_hours": 1.5,
+      "pedagogy_notes": "NCDL:子 agent 调用不一定能成功(找失败模式)"
+    },
+    {
+      "day": 4,
+      "label": "Skill 自定义",
+      "nodes": ["c7"],
+      "daily_goal": "能为你自己的工作流设计一个 Skill",
+      "estimated_hours": 1.5,
+      "pedagogy_notes": "双层覆盖:理论加实例(以 /review skill 为例子)"
+    },
+    {
+      "day": 5,
+      "label": "实战工作流(综合)",
+      "nodes": ["c8"],
+      "daily_goal": "用 Claude Code 重构一个真实模块,从需求到提交",
+      "estimated_hours": 1.5,
+      "pedagogy_notes": "螺旋复访:c1-c7 知识全部整合"
+    },
+    {
+      "day": 6,
+      "label": "失败模式与诊断(收尾)",
+      "nodes": ["c9", "c10"],
+      "daily_goal": "能识别 Claude Code 的常见失败模式并调试",
+      "estimated_hours": 1.5,
+      "pedagogy_notes": "NCDL 收尾:把整个课程的失败模式串在一起"
+    }
+  ]
+}
