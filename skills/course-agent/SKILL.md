@@ -67,10 +67,32 @@
 2. 每个 subagent 负责一天的产出:
    - `course/lessonXX/notes.md`(8 步趁热打铁笔记)
    - `course/lessonXX/README.md`(当天入口)
-   - `course/lessonXX/in_class/practice01-06.py`(6 道当堂练)
-   - `course/lessonXX/homework/task01-03.py`(3 道课后作业)
+   - `course/lessonXX/in_class/practice01-06.{ext}`(6 道当堂练)
+   - `course/lessonXX/homework/task01-03.{ext}`(3 道课后作业)
 3. subagent 写完后用 `scripts/validate.py` 校验产出
 4. 失败的 lesson 单独标记,不阻塞其他 lesson
+
+**教学法触发(v1.1 R3):**
+
+当 `lesson_plan` 的节点带 `teaching_method` 字段时,notes.md 必须包含对应结构:
+
+| teaching_method | notes.md 必须含 | 练习必须含 |
+|---|---|---|
+| `ncdl` | Break It 演示段(故意写错代码 → Traceback → Fix) | 至少 1 道找出反模式的题 |
+| `dual_layer` | 叙事锚点段(80% 教学时间)+语法点独立样本段 | 业务代码练习 |
+| `consumer_gate` | (无限制) | 至少 1 道用消费者函数 ≤4 行门控 |
+
+未标 teaching_method = 默认教学法(纯讲解)。
+
+**文件后缀(v1.1 R3):**
+
+练习文件后缀必须与运行环境一致(从 `requirements.json` 的 `constraints` 推断):
+- HTML 课程 → `.html` + `.css` + `.js`
+- JS 课程 → `.js`
+- Python 课程 → `.py`
+- 其他语言 → 对应扩展名
+
+不强制但强烈建议——避免学员混用运行环境。
 
 **并行协调:**
 - 每个 subagent 写到自己隔离的 `course/lessonXX/` 目录

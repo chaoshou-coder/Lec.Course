@@ -144,7 +144,23 @@ except AttributeError as e:
 
 ---
 
-## 8. 与 Lec.Python 课堂 slides 的区别
+## 8. notes.md 必须含"明日衔接"段(v1.1 R3 新增)
+
+每个 notes.md 末尾必须有一段"明日衔接"(≤3 行):
+
+```
+## 明日衔接
+
+- 明天 Day 02 学什么:"三种声明方式的作用域差异"
+- 今天遗留的概念:今天只学了"声明",还没学"作用域"
+- 可以预告一个 NCDL 反模式(NCDL 节点):"var 的 hoisting 和 TDZ 误解"
+```
+
+**为什么:** 让螺旋复访从设计阶段可见,学员知道接下来要学什么,以及今天遗漏了什么。
+
+---
+
+## 9. 与 Lec.Python 课堂 slides 的区别
 
 Lec.Python 产出的 slides 面向**课堂有教师场景**。Lec.Course 产出的笔记面向**自学场景**。差异:
 
