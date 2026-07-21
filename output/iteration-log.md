@@ -125,3 +125,41 @@
 **为什么:** 让 BUILD 真正反映 PLAN 的设计意图,而不是凭 agent 默认行为;改善跨语言/跨主题的兼容性;让螺旋复访从设计阶段就可见。
 
 
+
+---
+
+## R4: Claude Code 使用 × DISCOVER
+
+**日期:** 2026-07-21
+**测试用例:** Claude Code CLI(工具/元主题)
+**能力点:** DISCOVER(需求问答 + 研究)
+**产出:** `output/iter-R4-claude-code-discover/requirements.json`
+**校验:** ✅ schema 通过(应用了 R1 全部改进)
+
+### 评估发现
+
+✅ R1 改进在工作:
+- learner_persona 正确填写(在职开发者/Python 3年)
+- topic_type="独立主题" 明确
+- acceptance_criteria 覆盖 3 个认知层级
+- constraints 没有"或"歧义
+
+❌ 新摩擦点(元主题特化):
+
+1. **target_capability 范围过大** —— 5 件能力塞进 2 周入门课太多。DISCOVER 缺核心/边缘区分。
+2. **"理解层" criteria 用"背诵"驱动** —— "5 句话解释"是机械背诵,不是真理解。理解层应该用"教别人/类比/预测失败"。
+3. **reference_courses vs reference_resources 混在一起** —— YouTube/awesome-* 不是结构化课程。
+4. **缺"学完后真实使用场景"** —— 验收 criteria 不足以覆盖成功场景。
+5. **current_level 单维度** —— 工具熟练度和主题深度应分开。
+
+### Skill 改进(暂记,等 R8 后统一起 schema)
+
+methodology/01-discover-target-domain.md:
+1. target_capability 收敛(≤3 核心,余下进 scope_out_of_v1)
+2. acceptance_criteria "理解层" 用"教别人/类比/预测失败"形式
+3. reference_courses vs reference_resources 分离
+4. success_scenarios 字段(3-5 个具体场景)
+5. current_level 拆 topic_depth + tool_fluency
+
+**note:** R8 后统一起 schema,避免中途多次回滚。
+
