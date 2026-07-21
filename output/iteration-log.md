@@ -401,3 +401,32 @@ methodology/02-build-knowledge-dag.md:
 - methodology/06 新增"QA 深度检查要求"章节(四维检查)
 - QA 从"查文件存在"升级到"查内容完整+查知识准确+查 pedagogy 对照+查学员视角"
 
+
+---
+
+## R11: Web Scraping × 全流程(最终验证)
+
+**日期:** 2026-07-21
+**测试用例:** Web Scraping(全新领域)
+**能力点:** 全流程端到端验证
+**产出:**
+- `output/iter-R11-webscraping/requirements.json`(DISCOVER)
+- `output/iter-R11-webscraping/learning-plan.json`(PLAN)
+- `output/iter-R11-webscraping/course/lesson01/`(BUILD Day 1)
+- `output/iter-R11-webscraping/qa-report.json`(QA)
+**校验:** ✅ 全部 schema 通过
+
+### v1.1 在新领域的表现
+
+| 阶段 | 评估 | 结果 |
+|------|------|------|
+| DISCOVER | 聚焦(≤3 核心 + scope_out_of_v1),persona 清晰,criteria 3 层级 | ✅ pass |
+| PLAN | DAG 教学法标注清晰(w4=ncdl),pedagogy_notes 每课都有 | ✅ pass |
+| BUILD Day 1 | 8 步完整,工具先行落地,明日衔接段存在,文件后缀 .py | ✅ pass |
+| QA | 四维检查全部执行,发现 0 个新缺陷 | ✅ pass |
+
+### 结论
+
+v1.1 skill 在全新领域(Web Scraping)表现良好,全流程无需额外调整即可跑通。
+8 轮 micro-cycle 迭代(累积 R1-R11)验证了 skill 的通用性和稳定性。
+

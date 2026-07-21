@@ -1,0 +1,74 @@
+{
+  "dag_nodes": [
+    { "id": "w1", "label": "爬虫基础(HTTP 请求 + HTML 解析)", "granularity": "操作级", "min_requirement": "能写" },
+    { "id": "w2", "label": "数据提取(CSS 选择器 + 正则)", "granularity": "操作级", "min_requirement": "能写" },
+    { "id": "w3", "label": "数据存储(CSV/JSON 导出)", "granularity": "操作级", "min_requirement": "能写" },
+    { "id": "w4", "label": "反爬机制(429/封 IP/headers/延时)", "granularity": "理解级", "min_requirement": "能写", "teaching_method": "ncdl" },
+    { "id": "w5", "label": "实战:抓取一个真实网站", "granularity": "操作级", "min_requirement": "能写" },
+    { "id": "w6", "label": "进阶:动态页面与框架选择", "granularity": "理解级", "min_requirement": "了解" }
+  ],
+  "dag_edges": [
+    { "from": "w1", "to": "w2", "strength": "strong", "note": "会发请求才能解析内容" },
+    { "from": "w2", "to": "w3", "strength": "strong", "note": "提取数据后才能存储" },
+    { "from": "w2", "to": "w4", "strength": "strong", "note": "提取数据后常遇到反爬" },
+    { "from": "w3", "to": "w5", "strength": "strong", "note": "会存储才能做实战" },
+    { "from": "w4", "to": "w5", "strength": "strong", "note": "会处理反爬才能实战" },
+    { "from": "w5", "to": "w6", "strength": "weak", "note": "实战后了解进阶选项" }
+  ],
+  "topological_order": [
+    ["w1"],
+    ["w2"],
+    ["w3", "w4"],
+    ["w5"],
+    ["w6"]
+  ],
+  "pruned_branches": [
+    { "node": "Scrapy 框架深入", "reason": "v1 范围不可达,属于 v2 进阶专题" },
+    { "node": "Selenium/Playwright 动态渲染", "reason": "v1 范围不可达,属于 v2 进阶专题" },
+    { "node": "分布式爬虫(多机协作)", "reason": "v1 范围不可达,属于 v2 进阶专题" },
+    { "node": "代理池/验证码识别", "reason": "v1 范围不可达,属于 v2 进阶专题" }
+  ],
+  "pruning_review_required": true,
+  "lesson_plan": [
+    {
+      "day": 1,
+      "label": "爬虫基础:发送请求与解析 HTML",
+      "nodes": ["w1"],
+      "daily_goal": "能用 requests 获取网页,用 BeautifulSoup 解析标题",
+      "estimated_hours": 2,
+      "pedagogy_notes": "工具先行:Day 1 就抓取一个真实网页"
+    },
+    {
+      "day": 2,
+      "label": "数据提取:选择器与正则",
+      "nodes": ["w2"],
+      "daily_goal": "能用 CSS 选择器提取产品列表数据",
+      "estimated_hours": 2,
+      "pedagogy_notes": "脚手架递进:在 Day 1 请求基础上练习提取"
+    },
+    {
+      "day": 3,
+      "label": "数据存储与反爬机制",
+      "nodes": ["w3", "w4"],
+      "daily_goal": "能存 CSV,理解反爬并加 headers/延时",
+      "estimated_hours": 2,
+      "pedagogy_notes": "NCDL:w4 节点展示'被封'的反模式(疯狂重试/不加 headers)"
+    },
+    {
+      "day": 4,
+      "label": "实战:抓取真实网站",
+      "nodes": ["w5"],
+      "daily_goal": "独立抓取一个真实网站,产出 CSV",
+      "estimated_hours": 2,
+      "pedagogy_notes": "螺旋复访:w1-w4 知识全部整合"
+    },
+    {
+      "day": 5,
+      "label": "进阶:动态页面与框架选择",
+      "nodes": ["w6"],
+      "daily_goal": "了解何时该用 Scrapy/Selenium,完成课程",
+      "estimated_hours": 1.5,
+      "pedagogy_notes": "概念了解即可,不深入实操"
+    }
+  ]
+}
