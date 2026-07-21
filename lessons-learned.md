@@ -57,6 +57,29 @@
 - `reference_courses`:结构化课程(有 syllabus)
 - `reference_resources`:博客/视频/awesome-list(无 syllabus)
 
+## v1.2 新增规则(R12 产出分析)
+
+### 11. 执行过程跟踪必须用编号步骤(①②③④)
+- 每行代码必须有编号步骤,不能只写"第X行:做什么"
+- 步骤要详细到"内存/流程变化"层面
+- 循环/条件必须展示"回到某行再判断"的过程
+
+### 12. NCDL Break It 是强制的,不是可选的
+- 当 learning-plan 标了 `teaching_method: ncdl` 时,该知识点**必须**包含 Break It 演示
+- 每个 NCDL 节点 ≥ 1 段 Break It 演示
+
+### 13. 每个知识点后必须有学员代码区(不是只在最后)
+- 每个概念学完,立即练习才能巩固
+- 格式: `## 学员代码区`(pass 占位)+ `## 参考答案`
+
+### 14. 常见错误必须包含具体 Python 报错信息
+- 如 `TypeError: unsupported operand type(s) for +: 'int' and 'str'`
+- 不能写"会报错",必须给出真实报错 + 原因 + 修正方式
+
+### 15. 示例代码每行必须有中文注释
+- 初学者需要每行都有解释
+- 不能只有部分行有注释
+
 ## 防回归检查清单
 
 每轮 BUILD 前,逐项检查:
