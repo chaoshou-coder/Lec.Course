@@ -342,3 +342,32 @@ methodology/02-build-knowledge-dag.md:
 
 **skill 从 v1.0 演化到 v1.1,质量显著提升。**
 
+
+---
+
+## R9: JS 变量 Day 2-3 × BUILD(教学法触发验证)
+
+**日期:** 2026-07-21
+**测试用例:** JavaScript 变量 Day 2(ncdl)+Day 3(consumer_gate)
+**能力点:** BUILD(教学法触发是否真的工作)
+**产出:** `output/iter-R9-js-build-pedagogy/course/`(lesson02+lesson03,22 文件)
+**校验:** ✅ 全部 schema 通过
+
+### 教学法触发验证结果
+
+| 检查项 | 预期 | 实际 | 结果 |
+|--------|------|------|------|
+| Day 2 Break It 段 | ≥3 | 3 | ✅ |
+| Day 2 反模式练习 | ≥1 | 2 | ✅ |
+| Day 3 消费者函数练习 | ≥1 | 3 | ✅ |
+| 明日衔接段 | 2 | 2 | ✅ |
+| 文件后缀 .js | 18 | 18 | ✅ |
+| 文件后缀 .py | 0 | 0 | ✅ |
+
+### 结论
+
+教学法触发工作正常:ncdl 节点自动产出 Break It 段,consumer_gate 节点自动产出消费者函数练习,文件后缀自动匹配 .js。SKILL.md v1.1 教学触发表清晰,BUILD 可以正确遵循。
+
+### 改进
+
+本轮无新增 skill 缺陷。教学法触发机制验证通过,固化到 v1.2。
