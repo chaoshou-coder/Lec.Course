@@ -1,0 +1,61 @@
+{
+  "target_capability": "掌握 Python 核心语法(Day01-10)、NumPy 数值计算(Day11-12)、Pandas 数据处理(Day13),具备进入 AI/ML 领域的编程基础",
+  "scope_out_of_v1": [
+    "并发编程(threading/async)",
+    "网络编程(HTTP/WebSocket)",
+    "数据库(SQLite/PostgreSQL)",
+    "Web 框架(Flask/FastAPI)",
+    "深度学习框架(PyTorch)"
+  ],
+  "learner_persona": {
+    "age_stage": "成人初学者/跨行学习者",
+    "background": "零编程经验或仅了解基本概念。会用电脑,但未写过代码。数学基础薄弱(高中数学),对公式有畏惧。",
+    "motivation": "转行 AI/数据分析,或提升现有工作技能。需要从零开始,循序渐进,能做出实际项目。"
+  },
+  "topic_type": "路径第N步",
+  "current_level": {
+    "topic_depth": "零基础 —— 了解'变量是容器'类比,但未写过任何 Python 代码。不了解编程概念(循环/函数/类)。",
+    "tool_fluency": "会用电脑,会用终端装库,但没用过代码编辑器(VS Code)。"
+  },
+  "daily_hours": 6,
+  "depth_goal": "能写",
+  "acceptance_criteria": [
+    "理解层:能向没学过编程的人解释'变量是容器''循环是重复''函数是封装'三个类比,并预测'如果 while 条件永远为真会怎样'(死循环)",
+    "应用层:独立编写一个购物车系统(商品浏览/加入购物车/结算/JSON 持久化),代码 ≥ 100 行,函数拆分合理",
+    "分析层:给定一段含 bug 的 Python 代码(如 IndexError/KeyError/死循环),能诊断原因并修正;给定一个数据集,能用 Pandas 做基础分析(读取 CSV/筛选/统计)"
+  ],
+  "success_scenarios": [
+    "遇到'重复做某件事',会想到用循环而不是复制粘贴代码",
+    "遇到'数据需要临时存储',会想到用列表/字典而不是单个变量",
+    "遇到'代码重复',会想到封装成函数",
+    "遇到'表格数据',会想到用 Pandas 而不是手动处理"
+  ],
+  "constraints": [
+    "运行环境 = Python 3.10+ + VS Code + NumPy + Pandas",
+    "每天 6 小时(约 6 节 × 45 分钟),13 天完成",
+    "不教并发/网络/Web 框架,专注核心 + 数据科学基础"
+  ],
+  "research_grounded": true,
+  "reference_courses": [
+    {
+      "name": "Python 官方教程",
+      "source": "https://docs.python.org/3/tutorial/",
+      "syllabus_extracted": true
+    },
+    {
+      "name": "Python for Everybody(py4e)",
+      "source": "https://www.py4e.com/",
+      "syllabus_extracted": true
+    },
+    {
+      "name": "NumPy 官方快速入门",
+      "source": "https://numpy.org/doc/stable/user/quickstart.html",
+      "syllabus_extracted": true
+    },
+    {
+      "name": "Pandas 官方入门",
+      "source": "https://pandas.pydata.org/docs/getting_started/",
+      "syllabus_extracted": true
+    }
+  ]
+}
