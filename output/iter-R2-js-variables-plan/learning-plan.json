@@ -1,0 +1,57 @@
+{
+  "dag_nodes": [
+    { "id": "v1", "label": "变量概念(命名空间与值的绑定)", "granularity": "理解级", "min_requirement": "了解" },
+    { "id": "v2", "label": "变量声明语法(let/const/var 写法)", "granularity": "操作级", "min_requirement": "能写" },
+    { "id": "v3", "label": "var 的函数作用域与 hoisting", "granularity": "理解级", "min_requirement": "能写", "teaching_method": "ncdl" },
+    { "id": "v4", "label": "let 的块级作用域", "granularity": "理解级", "min_requirement": "能写", "teaching_method": "ncdl" },
+    { "id": "v5", "label": "const 的不可重新赋值(≠ 不可变)", "granularity": "理解级", "min_requirement": "能写", "teaching_method": "ncdl" },
+    { "id": "v6", "label": "三种声明方式的对比与场景选择", "granularity": "理解级", "min_requirement": "能教", "teaching_method": "consumer_gate" }
+  ],
+  "dag_edges": [
+    { "from": "v1", "to": "v2", "strength": "strong", "note": "先理解变量是什么,再学声明语法" },
+    { "from": "v2", "to": "v3", "strength": "strong", "note": "会写声明才能理解 var 的作用域" },
+    { "from": "v2", "to": "v4", "strength": "strong", "note": "会写声明才能理解 let 的作用域" },
+    { "from": "v2", "to": "v5", "strength": "strong", "note": "会写声明才能理解 const 的限制" },
+    { "from": "v3", "to": "v6", "strength": "strong", "note": "理解 var 才能做对比" },
+    { "from": "v4", "to": "v6", "strength": "strong", "note": "理解 let 才能做对比" },
+    { "from": "v5", "to": "v6", "strength": "strong", "note": "理解 const 才能做对比" }
+  ],
+  "topological_order": [
+    ["v1"],
+    ["v2"],
+    ["v3", "v4", "v5"],
+    ["v6"]
+  ],
+  "pruned_branches": [
+    { "node": "数据类型(number/string/boolean)", "reason": "从终点能力(声明方式选择)不可达,属于后续独立主题" },
+    { "node": "TDZ 深入分析", "reason": "了解层级足够,深入分析属于 v2 进阶主题" },
+    { "node": "解构赋值/展开运算符", "reason": "从终点能力不可达,属于后续独立主题" }
+  ],
+  "pruning_review_required": true,
+  "lesson_plan": [
+    {
+      "day": 1,
+      "label": "变量概念与声明语法入门",
+      "nodes": ["v1", "v2"],
+      "daily_goal": "理解变量概念,能用三种关键字声明变量",
+      "estimated_hours": 1.5,
+      "pedagogy_notes": "工具先行:第一天就教实际声明,概念类比放最前"
+    },
+    {
+      "day": 2,
+      "label": "三种声明方式的作用域",
+      "nodes": ["v3", "v4", "v5"],
+      "daily_goal": "区分三种声明方式的作用域差异",
+      "estimated_hours": 1.5,
+      "pedagogy_notes": "脚手架递进:每天三个节点,每个对应一种声明方式,认知阶梯清晰"
+    },
+    {
+      "day": 3,
+      "label": "场景选择与综合应用",
+      "nodes": ["v6"],
+      "daily_goal": "能根据场景选择正确的声明方式并解释理由",
+      "estimated_hours": 1.0,
+      "pedagogy_notes": "消费者门控:用消费者函数(<4 行)约束学员必须多态思考"
+    }
+  ]
+}
