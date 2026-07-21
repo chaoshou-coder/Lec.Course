@@ -66,18 +66,21 @@ Lec.Course/
 python scripts/validate.py schemas/requirements.schema.json path/to/requirements.md.json
 ```
 
-## 实施顺序(关键路径)
+## 实施顺序(关键路径)—— 全部完成 ✅
 
 ```
-T1(骨架) ✅ ─▶ T2(方法论迁移) ✅ ─▶ T4(schema) ✅ ─▶ T5(discover skill) ─▶ T6(plan) ─▶ T7(build+qa) ─▶ T8(状态机harness) ─▶ T9(README)
-       │                                      ▲
-       └──▶ T3(验证样本) ──────────────────────┘
+T1(骨架) ✅ ─▶ T2(方法论迁移) ✅ ─▶ T4(schema) ✅ ─▶ T5/T6(DISCOVER+PLAN) ✅ ─▶ T7(BUILD 10天课程) ✅ ─▶ T8(状态机harness) ✅ ─▶ T9(README) ✅ ─▶ T10(CI) ✅
+       │                                               ▲
+       └──▶ T3(验证样本,待补) ──────────────────────────┘
 ```
 
-T10(CI) 可在 T4 之后的任意时间做。
+**当前状态:** v1.0 首个端到端验证完成。HTML 基础知识案例跑通 DISCOVER → PLAN → BUILD 全管线。
 
-**下一步 = T3(复制 Lec.Python 60 课为 examples)或直接 T5(搭 discover skill)。**
-T3 和 T5 无依赖关系,可并行。建议先 T5(核心代码路径),T3 作为验证样本后补。
+**下一步(可选):**
+- T3: 复制 Lec.Python 60 课为 examples/python-60day/(验证样本 + ground truth)
+- 用新知识域(如 Web Scraping / RAG)跑全流程,验证框架通用性
+- 完善 mini_project 和 weekly_projects
+- 跑 QA 验收(产出 output/qa-report.json)
 
 ## 不改这些
 
