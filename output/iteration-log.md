@@ -240,3 +240,41 @@ methodology/02-build-knowledge-dag.md:
 4. 增加"对比体验"节点类型:适用于元技能/工具类主题
 
 **note:** 继续累积,等 R8 一起统一应用。
+
+---
+
+## R7: HTML 完整 × QA
+
+**日期:** 2026-07-21
+**测试用例:** HTML 基础知识(完整 10 天课程)
+**能力点:** QA(独立 subagent 验收)
+**产出:** `output/iter-R7-html-qa/qa-report.json`
+**校验:** ✅ schema 通过
+
+### 评估发现
+
+✅ QA 流程工作正常:
+- 结构检查:10 课 × 11 文件全部存在,文件头标注完整,难度分布符合线性递进
+- 内容检查:4 条 acceptance_criteria 逐条对应,3 条 pass,1 条 partial
+- 发现问题:Day 10 GitHub Pages 部署步骤不够详细(缺少 git 命令和仓库设置)
+- 推荐动作:rebuild-lesson lesson10(合理)
+
+❌ 新摩擦点(QA 特化):
+
+1. **QA 没有"内容正确性"深度检查** —— 当前 QA 只检查了"有没有覆盖 criteria",没有检查"内容是否真的正确"。比如 Day 5 表单的 `method="post"` 解释是否准确?QA 没有验证知识性内容。
+
+2. **structural_check 没有验证 8 步循环** —— 只检查了文件存在和文件头,没有验证 notes.md 是否真的包含 8 步(痛点/类比/解释/ASCII/执行跟踪/常见错误/学员代码区/参考答案)。
+
+3. **QA 没有对照 PLAN 的 pedagogy_notes** —— R2 给每课标了 pedagogy_notes(工具先行/脚手架递进),但 QA 没有验证这些教学法是否真的落地。
+
+4. **缺少"学员视角"的验收** —— QA 是 agent 视角(检查文件/内容),缺少"学员视角"(这个练习学员 5 分钟能做出来吗?这个类比学员能理解吗?)。
+
+### Skill 改进(继续暂记,等 R8 后批量应用)
+
+`methodology/06-subject-specific-patterns.md`(QA 参考):
+1. QA 增加"知识性内容正确性"抽查:随机抽 2-3 个知识点,验证其定义/示例/解释是否准确
+2. structural_check 增加 8 步循环验证:notes.md 必须包含 8 个关键段
+3. QA 增加 pedagogy_notes 对照:验证 PLAN 标注的教学法是否在 BUILD 中落地
+4. QA 增加"学员视角"评估:练习难度是否匹配目标学员水平
+
+**note:** 继续累积,等 R8 一起统一应用。
