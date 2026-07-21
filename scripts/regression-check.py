@@ -30,57 +30,67 @@ def check_course(course_dir: str) -> int:
         print(f"目录不存在: {course_dir}")
         return 1
 
-    # 推断运行环境(从第一个 practice 文件)
-    practice_files = list(course_path.rglob("in_class/practice*"))
-    if not practice_files:
-        print("  ⚠️ 没有找到 practice 文件")
-        return 0
+    # 支持两种结构:
+    # 旧结构: course_dir/lessonXX/in_class/practice*.py
+    # 新结构: exercises/{topic}/practice*.py + knowledge/{XX}-{topic}.md
 
-    suffix = practice_files[0].suffix  # .py / .js / .sql / .md / .sh
+    # 找 practice 文件(旧结构)
+    practice_old = list(course_path.rglob("in_class/practice*"))
+    # 找 practice 文件(新结构)
+    practice_new = list(course_path.glob("practice*"))
 
-    # 检查每个 lesson
-    for lesson in sorted(course_path.glob("lesson*")):
-        name = lesson.name
-
-        # 1. 必须文件存在
-        for required in ["README.md", "notes.md"]:
-            if not (lesson / required).exists():
-                errors.append(f"{name}: 缺少 {required}")
-
-        # 2. practice 数量
-        in_class = list((lesson / "in_class").glob("*")) if (lesson / "in_class").exists() else []
-        if len(in_class) != 6:
-            errors.append(f"{name}: practice 数量 = {len(in_class)}(期望 6)")
-
-        # 3. task 数量
-        homework = list((lesson / "homework").glob("*")) if (lesson / "homework").exists() else []
-        if len(homework) != 3:
-            errors.append(f"{name}: task 数量 = {len(homework)}(期望 3)")
-
-        # 4. notes.md 8 步循环
-        notes_file = lesson / "notes.md"
-        if notes_file.exists():
-            notes_text = notes_file.read_text(encoding="utf-8")
-            steps = ["痛点", "类比", "解释", "常见错误", "学员代码区", "参考答案"]
-            missing = [s for s in steps if s not in notes_text]
-            if missing:
-                errors.append(f"{name}/notes.md 缺: {', '.join(missing)}")
-
-            # 5. 明日衔接
-            if "明日衔接" not in notes_text:
-                errors.append(f"{name}/notes.md 缺: 明日衔接段")
-
-        # 6. practice 文件头
-        for p in in_class:
+    if practice_old:
+        # 旧结构: lessonXX/in_class/practice*.py
+        suffix = practice_old[0].suffix
+        for lesson in sorted(course_path.glob("lesson*")):
+            name = lesson.name
+            for required in ["README.md", "notes.md"]:
+                if not (lesson / required).exists():
+                    errors.append(f"{name}: 缺少 {required}")
+            in_class = list((lesson / "in_class").glob("*")) if (lesson / "in_class").exists() else []
+            if len(in_class) != 6:
+                errors.append(f"{name}: practice 数量 = {len(in_class)}(期望 6)")
+            homework = list((lesson / "homework").glob("*")) if (lesson / "homework").exists() else []
+            if len(homework) != 3:
+                errors.append(f"{name}: task 数量 = {len(homework)}(期望 3)")
+            notes_file = lesson / "notes.md"
+            if notes_file.exists():
+                notes_text = notes_file.read_text(encoding="utf-8")
+                steps = ["痛点", "类比", "解释", "常见错误", "学员代码区", "参考答案"]
+                missing = [s for s in steps if s not in notes_text]
+                if missing:
+                    errors.append(f"{name}/notes.md 缺: {', '.join(missing)}")
+                if "明日衔接" not in notes_text:
+                    errors.append(f"{name}/notes.md 缺: 明日衔接段")
+            for p in in_class:
+                text = p.read_text(encoding="utf-8", errors="ignore")
+                if "难度:" not in text and "难度：" not in text:
+                    errors.append(f"{name}/in_class/{p.name}: 缺少难度标注")
+            for t in homework:
+                text = t.read_text(encoding="utf-8", errors="ignore")
+                if "选做" not in text:
+                    errors.append(f"{name}/homework/{t.name}: 缺少选做标注")
+    elif practice_new:
+        # 新结构: exercises/{topic}/practice*.py
+        suffix = practice_new[0].suffix
+        name = course_path.name
+        practice_files = list(course_path.glob("practice*"))
+        task_files = list(course_path.glob("task*"))
+        if len(practice_files) != 6:
+            errors.append(f"{name}: practice 数量 = {len(practice_files)}(期望 6)")
+        if len(task_files) != 3:
+            errors.append(f"{name}: task 数量 = {len(task_files)}(期望 3)")
+        for p in practice_files:
             text = p.read_text(encoding="utf-8", errors="ignore")
             if "难度:" not in text and "难度：" not in text:
-                errors.append(f"{name}/in_class/{p.name}: 缺少难度标注")
-
-        # 7. task 文件头
-        for t in homework:
+                errors.append(f"{name}/{p.name}: 缺少难度标注")
+        for t in task_files:
             text = t.read_text(encoding="utf-8", errors="ignore")
             if "选做" not in text:
-                errors.append(f"{name}/homework/{t.name}: 缺少选做标注")
+                errors.append(f"{name}/{t.name}: 缺少选做标注")
+    else:
+        print("  ⚠️ 没有找到 practice 文件")
+        return 0
 
     # 输出结果
     if errors:
