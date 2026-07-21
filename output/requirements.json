@@ -1,0 +1,35 @@
+{
+  "target_capability": "独立完成一个个人作品集网站(包含首页、关于我、项目展示、联系表单四个区块)的HTML编码与上线部署",
+  "current_level": "零编程经验,熟悉电脑基本操作(浏览网页、创建文件/文件夹),未接触过HTML/CSS/代码编辑器",
+  "daily_hours": 2,
+  "depth_goal": "能写",
+  "acceptance_criteria": [
+    "给定一个空白HTML文件,能独立写出包含DOCTYPE/html/head/body/title/meta的完整文档骨架",
+    "给定一组项目信息(标题/描述/截图),能用section/article/ul/li语义化标签构建项目展示区",
+    "给定联系需求(姓名/邮箱/留言),能用form/input/textarea/button/label独立编写可提交的联系表单",
+    "给定已完成的作品集HTML文件,能使用GitHub Pages将其部署为可公开访问的在线网站"
+  ],
+  "constraints": [
+    "仅使用HTML(不涉及CSS/JS),保证零基础可上手",
+    "使用免费工具(VS Code + 浏览器开发者工具)",
+    "每天学习时长约2小时,总周期控制在2周内"
+  ],
+  "research_grounded": true,
+  "reference_courses": [
+    {
+      "name": "HTML Tutorial",
+      "source": "https://developer.mozilla.org/zh-CN/docs/Learn/HTML",
+      "syllabus_extracted": true
+    },
+    {
+      "name": "Responsive Web Design Certification",
+      "source": "https://www.freecodecamp.org/learn/2022/responsive-web-design/",
+      "syllabus_extracted": true
+    },
+    {
+      "name": "HTML Tutorial",
+      "source": "https://www.w3schools.com/html/",
+      "syllabus_extracted": false
+    }
+  ]
+}
