@@ -3,7 +3,7 @@
 > **归属阶段:** BUILD (每个 build subagent 强制参考) + QA (structural_check 依据)
 > **原始文档:** Lec.Python `dev/skills/05_Jupyter_Notebook_排版规范.md`
 > **用途:** 所有自学笔记材料(self-study notes,取代课堂 slides)必须遵守的排版标准。这是 QA 态 structural_check 的直接依据。
-> **版本:** v3.0(2026-07-14),以 OOP Day08-11 notebook 为 gold standard 重写
+> **版本:** v3.0(2026-07-14),以 OOP 封装/继承/多态/组合 notebook 为 gold standard 重写
 > **关键升级:** 8 步趁热打铁循环 + ASCII 内存图 + NCDL Break It + 常见错误
 
 ---
@@ -201,22 +201,23 @@ print(p1.title)  # Python 入门
 
 ---
 
-## 7. per-Day 禁止语法清单
+## 7. 知识点顺序约束(无日程规划)
 
-编写笔记或练习前,必须确认当日知识点范围,禁止使用后续才教的语法:
+框架不强制每日学习顺序,但**知识点有前置依赖**。编写某个知识点的材料前,必须确认其前置知识点已经覆盖,不能使用学员还没学的语法。
 
-| Days | 已教 | 禁止 |
-|---|---|---|
-| Day01 | print/input/变量/类型 | def/class/循环/列表/字典 |
-| Day02 | +字符串/索引/切片/f-string | def/class/循环/列表/字典 |
-| Day03 | +if/elif/else | def/class/循环/列表/字典 |
-| Day04 | +while/for/range | def/class/列表/字典 |
-| Day05 | +def/函数 | class/列表/字典 |
-| Day06 | +列表/字典 | class |
-| Day07-10 | +class/OOP | 外部库 |
-| Day14+ | +NumPy/Pandas | sklearn/PyTorch/HF |
+**示例(Python 核心知识点序列):**
 
-**关键:** Day01 只学 print/input/变量/字符串/分支/循环,没有 def 和 class。编写任何材料前必须对照 `learning-plan.md` 确认当日知识点范围。
+| 知识点序号 | 主题 | 已教语法 | 禁止使用的语法 |
+|---|---|---|---|
+| 01 | 入门 | print/input/变量/类型 | def/class/循环/列表/字典 |
+| 02 | 字符串 | +字符串/索引/切片/f-string | def/class/循环/列表/字典 |
+| 03 | 条件分支 | +if/elif/else | def/class/循环/列表/字典 |
+| 04 | 循环 | +while/for/range | def/class/列表/字典 |
+| 05 | 函数 | +def/函数 | class/列表/字典 |
+| 06 | 容器 | +列表/字典 | class |
+| 07+ | OOP | +class/OOP | 外部库 |
+
+**关键:** 编写任何材料前必须对照 `learning-plan.md` 确认该知识点的**前置依赖已覆盖**,不能假设学员已经学会后续知识点。学员按自己的节奏学习,但知识点的依赖关系必须被尊重。
 
 ---
 

@@ -69,7 +69,7 @@ python scripts/validate.py schemas/requirements.schema.json path/to/requirements
 ## 实施顺序(关键路径)—— 全部完成 ✅
 
 ```
-T1(骨架) ✅ ─▶ T2(方法论迁移) ✅ ─▶ T4(schema) ✅ ─▶ T5/T6(DISCOVER+PLAN) ✅ ─▶ T7(BUILD 10天课程) ✅ ─▶ T8(状态机harness) ✅ ─▶ T9(README) ✅ ─▶ T10(CI) ✅
+T1(骨架) ✅ ─▶ T2(方法论迁移) ✅ ─▶ T4(schema) ✅ ─▶ T5/T6(DISCOVER+PLAN) ✅ ─▶ T7(BUILD 知识点课程) ✅ ─▶ T8(状态机harness) ✅ ─▶ T9(README) ✅ ─▶ T10(CI) ✅
        │                                               ▲
        └──▶ T3(验证样本,待补) ──────────────────────────┘
 ```
