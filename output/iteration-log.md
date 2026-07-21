@@ -202,3 +202,41 @@ methodology/01-discover-target-domain.md:
 3. PLAN 技能加"核心场景路径决策"—— 实战节点应拆或合应有明确判据(复杂 → 拆,简单 → 合)
 
 **note:** 等 R8 一起统一应用,继续累积 friction evidence。
+
+---
+
+## R6: pi coding agent 使用 × PLAN
+
+**日期:** 2026-07-21
+**测试用例:** pi coding agent(元技能:如何使用 AI 编程代理)
+**能力点:** PLAN(扒 DAG + 推理路径)
+**产出:** `output/iter-R6-pi-coding-plan/learning-plan.json`
+**校验:** ✅ schema + DAG valid(弱依赖同层和工具先行同天都是合理教学法模式)
+
+### 评估发现
+
+✅ R2 改进在工作:
+- 8 节点,p2/p4 标 ncdl(下达指令/拆分任务的失败模式),p3 标 dual_layer,p5 标 consumer_gate
+- 5 天都标了 pedagogy_notes
+- 4 项剪枝都有理由,pruning_review_required=true
+- 友好的 day_label
+
+❌ 新摩擦点(元技能 PLAN 特化):
+
+1. **"元技能"DAG 与"编程" DAG 结构不同** —— JS 变量是"概念→应用→综合"的累积结构,pi coding 是"下达→上下文→评估→迭代→实战"的**循环反馈**结构。当前的 DAG 是线性的,无法体现"迭代对话(p7)失败后再回到评估(p5)"这种回环。
+
+2. **teaching_method 标注不一致** —— p2(下达指令)和 p4(任务拆分)都标 ncdl,但 p7(迭代修正)没标。p7 才是 NCDL 的最佳应用场景(展示"错误修正"的失败模式)。
+
+3. **评估节点(p5)位置偏后** —— "如何判断 agent 产出是否正确"应该尽早出现(Day 1 末尾),因为学员从第一次下达任务就需要评估。当前 DAG 把它放在 Day 3,导致前两天学员不知道如何判断产出质量。
+
+4. **缺少"对比体验"设计** —— 元技能学习需要"用 agent vs 不用 agent"的对比,让学员感受差异。当前 DAG 没有这类对比节点。
+
+### Skill 改进(继续暂记,等 R8 后批量应用)
+
+methodology/02-build-knowledge-dag.md:
+1. 增加"回环 DAG"结构支持:某些主题(元技能/迭代流程)需要非线性的"尝试→评估→修正→再尝试"循环
+2. teaching_method 一致性规则:NCDL 应标在"失败模式最多"的节点,不是随意标
+3. 评估类节点前置规则:如果主题涉及"判断产出质量",评估节点应尽量前置(前 1/3 课程)
+4. 增加"对比体验"节点类型:适用于元技能/工具类主题
+
+**note:** 继续累积,等 R8 一起统一应用。

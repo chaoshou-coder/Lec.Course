@@ -1,0 +1,80 @@
+{
+  "dag_nodes": [
+    { "id": "p1", "label": "pi coding agent 是什么(定位与心智模型)", "granularity": "理解级", "min_requirement": "了解" },
+    { "id": "p2", "label": "prompt 工程:如何下达清晰任务指令", "granularity": "操作级", "min_requirement": "能写", "teaching_method": "ncdl" },
+    { "id": "p3", "label": "项目上下文注入(CLAUDE.md / 项目文档)", "granularity": "操作级", "min_requirement": "能写", "teaching_method": "dual_layer" },
+    { "id": "p4", "label": "subagent 并行任务拆分", "granularity": "操作级", "min_requirement": "能写", "teaching_method": "ncdl" },
+    { "id": "p5", "label": "输出评估:如何判断 agent 产出是否正确", "granularity": "理解级", "min_requirement": "能教", "teaching_method": "consumer_gate" },
+    { "id": "p6", "label": "失败模式:幻觉/过度自信/漏边界/跑偏", "granularity": "理解级", "min_requirement": "能教", "teaching_method": "ncdl" },
+    { "id": "p7", "label": "迭代对话:如何让 agent 修正错误", "granularity": "操作级", "min_requirement": "能写" },
+    { "id": "p8", "label": "真实项目实战:从需求到提 PR", "granularity": "操作级", "min_requirement": "能教" }
+  ],
+  "dag_edges": [
+    { "from": "p1", "to": "p2", "strength": "strong", "note": "知道是什么后才会下达指令" },
+    { "from": "p2", "to": "p3", "strength": "strong", "note": "下达指令后发现需要项目上下文" },
+    { "from": "p2", "to": "p4", "strength": "strong", "note": "会下任务后才能拆分" },
+    { "from": "p3", "to": "p4", "strength": "weak", "note": "有上下文后拆分更准确" },
+    { "from": "p4", "to": "p5", "strength": "strong", "note": "产出后需要评估" },
+    { "from": "p5", "to": "p6", "strength": "strong", "note": "评估后发现失败模式" },
+    { "from": "p5", "to": "p7", "strength": "strong", "note": "评估失败后才需要迭代修正" },
+    { "from": "p6", "to": "p7", "strength": "strong", "note": "识别失败模式才能有效修正" },
+    { "from": "p7", "to": "p8", "strength": "strong", "note": "会迭代才能做实战" }
+  ],
+  "topological_order": [
+    ["p1"],
+    ["p2"],
+    ["p3", "p4"],
+    ["p5"],
+    ["p6"],
+    ["p7"],
+    ["p8"]
+  ],
+  "pruned_branches": [
+    { "node": "多 agent 协作(多个 agent 同时工作)", "reason": "日常使用不可达,属于高级编排主题" },
+    { "node": "MCP 服务器自建", "reason": "使用层不可达,需要 plugin 开发" },
+    { "node": "具体 API 调用(SDK 编程)", "reason": "使用层不可达,属于开发者主题" },
+    { "node": "agent 安全与权限框架", "reason": "概念提及即可,深入属于进阶" }
+  ],
+  "pruning_review_required": true,
+  "lesson_plan": [
+    {
+      "day": 1,
+      "label": "认识 pi coding agent",
+      "nodes": ["p1", "p2"],
+      "daily_goal": "理解 agent 定位,能下达第一个清晰任务",
+      "estimated_hours": 1.5,
+      "pedagogy_notes": "工具先行:Day 1 就跑通第一个任务"     },
+    {
+      "day": 2,
+      "label": "上下文注入与任务拆分",
+      "nodes": ["p3", "p4"],
+      "daily_goal": "会写 CLAUDE.md,能把大任务拆成 subagent",
+      "estimated_hours": 1.5,
+      "pedagogy_notes": "双层覆盖:理论(为什么需要上下文)+实例(以真实项目为例)"
+    },
+    {
+      "day": 3,
+      "label": "输出评估与失败模式",
+      "nodes": ["p5", "p6"],
+      "daily_goal": "能判断 agent 产出是否正确,识别 4 种常见失败模式",
+      "estimated_hours": 1.5,
+      "pedagogy_notes": "NCDL:故意展示失败案例,让学员找错"
+    },
+    {
+      "day": 4,
+      "label": "迭代修正",
+      "nodes": ["p7"],
+      "daily_goal": "能让 agent 修正错误,而不是手动重写",
+      "estimated_hours": 1.0,
+      "pedagogy_notes": "脚手架递进:在 Day 3 评估基础上练习修正"
+    },
+    {
+      "day": 5,
+      "label": "实战:真实项目",
+      "nodes": ["p8"],
+      "daily_goal": "从需求到提 PR,完整用 agent 做一个真实项目",
+      "estimated_hours": 2.0,
+      "pedagogy_notes": "螺旋复访:p1-p7 知识全部整合"
+    }
+  ]
+}
