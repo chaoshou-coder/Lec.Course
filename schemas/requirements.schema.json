@@ -3,7 +3,7 @@
   "title": "requirements.schema",
   "description": "DISCOVER 态产出:课程需求定义,由 /course-discover 生成",
   "type": "object",
-  "required": ["target_capability", "current_level", "daily_hours", "depth_goal", "acceptance_criteria", "research_grounded"],
+  "required": ["target_capability", "current_level", "daily_hours", "depth_goal", "acceptance_criteria", "research_grounded", "learner_persona", "topic_type"],
   "properties": {
     "target_capability": {
       "type": "string",
@@ -26,9 +26,25 @@
       "enum": ["了解", "能写", "能教", "能优化"],
       "description": "深度目标:决定 DAG 每个节点的最低要求标注和剪枝边界"
     },
+    "learner_persona": {
+      "type": "object",
+      "description": "学员画像:谁在学习这个主题",
+      "required": ["age_stage", "background", "motivation"],
+      "properties": {
+        "age_stage": { "type": "string", "description": "中学生/大学生/在职/转行" },
+        "background": { "type": "string", "description": "已具备的知识和经验" },
+        "motivation": { "type": "string", "description": "学习动机:兴趣/工作/考试/做项目" }
+      },
+      "additionalProperties": false
+    },
+    "topic_type": {
+      "type": "string",
+      "enum": ["独立主题", "路径第N步"],
+      "description": "独立主题=从零开始;路径第N步=多课程路径的第N个(影响current_level写法)"
+    },
     "acceptance_criteria": {
       "type": "array",
-      "description": "验收标准列表(>=3 条),每项用'给定 X, 能产出 Y'格式,可独立判定",
+      "description": "验收标准列表(>=3 条),覆盖>=2 个认知层级(记忆理解/应用/分析评价),每项用'给定 X, 能产出 Y'格式",
       "items": { "type": "string", "minLength": 10 },
       "minItems": 3
     },

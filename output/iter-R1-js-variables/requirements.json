@@ -1,0 +1,35 @@
+{
+  "target_capability": "能独立使用 let/const/var 声明变量,理解三种声明方式的作用域和重新赋值规则,并根据场景选择正确的声明方式编写可运行的 JS 代码",
+  "current_level": "了解 HTML 基础标签,零 JavaScript 经验。理解'变量是容器'的类比,但未写过任何 JS 代码。不了解作用域、hoisting、const 与 let 的区别。",
+  "daily_hours": 1.5,
+  "depth_goal": "能写",
+  "acceptance_criteria": [
+    "给定一个场景描述(如'需要在循环中累加计数'),能正确选择 let/var/const 之一并写出声明语句",
+    "给定一段含变量的 JS 代码,能准确预测其输出结果(含作用域和 hoisting 行为)",
+    "给定一个'应不变的值'(如圆周率),能使用 const 声明并解释为什么不用 let"
+  ],
+  "constraints": [
+    "纯 JavaScript 语法,不涉及 DOM/浏览器 API",
+    "每天 1.5 小时,约 3-4 天完成",
+    "运行环境 = 浏览器控制台或 Node.js,不需要构建工具",
+    "中文讲解,英文术语保留原文"
+  ],
+  "research_grounded": true,
+  "reference_courses": [
+    {
+      "name": "MDN: JavaScript First Steps — Variables",
+      "source": "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps/Variables",
+      "syllabus_extracted": true
+    },
+    {
+      "name": "javascript.info: Variables",
+      "source": "https://javascript.info/variables",
+      "syllabus_extracted": true
+    },
+    {
+      "name": "freeCodeCamp: JavaScript Algorithms and Data Structures — Basic Data Types",
+      "source": "https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/",
+      "syllabus_extracted": false
+    }
+  ]
+}
