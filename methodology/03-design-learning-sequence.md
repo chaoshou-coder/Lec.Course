@@ -1,7 +1,6 @@
 # 03 · 学习顺序编排 —— 如何把 DAG 拓扑排序编排成可执行的学习计划
 
 > **归属阶段:** PLAN (状态机 `PLAN` 态核心参考)
-> **原始文档:** Lec.Python `dev/skills/03_学习顺序编排.md`
 > **用途:** 在知识依赖图(DAG)拓扑排序的基础上,安排具体到天的学习顺序,平衡认知负荷和教学效率。
 > **适用场景:** 把 `02-build-knowledge-dag.md` 产出的 DAG 转成 `learning-plan.md` 的 daily lesson_plan。
 
@@ -14,7 +13,7 @@
 - 来自 `requirements.md` 的 `daily_hours`(每日可用时长,仅供参考)和 `depth_goal`
 
 **输出:**
-- `learning-plan.md` 的 `lesson_plan` 字段: 每天学哪些节点、目标是什么、预计多久
+- `learning-plan.md` 的 `lesson_plan` 字段: 每个学习单元学哪些节点、目标是什么、预计多久
 
 ---
 
@@ -132,6 +131,6 @@ topological_order = [
 ## 交叉参考
 
 - **上游:** `02-build-knowledge-dag.md`(产出 DAG 和拓扑排序)、`requirements.md`(daily_hours / depth_goal)
-- **下游:** BUILD 态的并行子 agent 调度(每天 = 一个子 agent)、`04-design-assessments.md`(每天的练习设计)
+- **下游:** BUILD 态的并行子 agent 调度(每个知识点 = 一个子 agent)、`04-design-assessments.md`(每个知识点的练习设计)
 - **产物:** `learning-plan.md`(PLAN 态硬性产出,含 lesson_plan)
 - **验证:** QA 态检查 lesson_plan 的前置完整性和 daily_hours 合规性

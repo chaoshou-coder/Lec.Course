@@ -1,7 +1,6 @@
 # 04 · 试题集组织方法 —— 如何为每天的学习设计三层试题集
 
 > **归属阶段:** BUILD (状态机 `BUILD` 态参考,每个 build subagent 使用)
-> **原始文档:** Lec.Python `dev/skills/04_试题集组织方法.md`
 > **用途:** 为每个知识点系统设计当堂练(practice) + 课后作业(task) + 综合项目(weekly project)三层试题集。
 > **适用场景:** build subagent 制课过程中,为每天的 lesson 产出配套练习。
 

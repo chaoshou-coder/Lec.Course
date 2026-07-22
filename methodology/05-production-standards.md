@@ -1,7 +1,6 @@
 # 05 · 自学材料排版规范 —— build subagent 产出笔记时必须遵守的格式标准
 
 > **归属阶段:** BUILD (每个 build subagent 强制参考) + QA (structural_check 依据)
-> **原始文档:** Lec.Python `dev/skills/05_Jupyter_Notebook_排版规范.md`
 > **用途:** 所有自学笔记材料(self-study notes,取代课堂 slides)必须遵守的排版标准。这是 QA 态 structural_check 的直接依据。
 > **版本:** v3.0(2026-07-14),以 OOP 封装/继承/多态/组合 notebook 为 gold standard 重写
 > **关键升级:** 8 步趁热打铁循环 + ASCII 内存图 + NCDL Break It + 常见错误
@@ -280,22 +279,6 @@ print(p1.title)  # Python 入门
 - 链接使用相对路径 `../knowledge/xxx.md`
 
 **为什么:** 学员按自己的节奏学习,需要清晰的导航在不同知识点间跳转。
-
----
-
-## 9. 与 Lec.Python 课堂 slides 的区别
-
-Lec.Python 产出的 slides 面向**课堂有教师场景**。Lec.Course 产出的笔记面向**自学场景**。差异:
-
-| 维度 | Lec.Python 课堂 | Lec.Course 自学 |
-|---|---|---|
-| 教师讲解 | 有(教师逐行讲) | 无(笔记必须自解释) |
-| 执行跟踪 | 可选 | **必须内嵌**(第 ③ 步) |
-| 常见错误 | 由教师口述 | **必须写入笔记**(第 ⑤ 步) |
-| 苏格拉底引导 | 不需要 | **必须写**(第 ⑥ 步),因为没有教师引导 |
-| 8 步完整度 | 可能跳过 ②⑥ | **8 步必须完整** |
-
-这意味着 Lec.Course 的自学材料信息密度必须**高于**课堂 slides —— 因为学员身边没有教师。
 
 ---
 
