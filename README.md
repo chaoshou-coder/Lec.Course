@@ -84,18 +84,6 @@ course-name/
 - 知识点末尾有"下一个/上一个"链接,学员按自己节奏跳转
 - 没有"Day 1/Day 2"的强制日程
 
-## 设计文档
-
-完整设计 + CEO 评审报告:see `~/.gstack/projects/chaoshou-coder-Lec.Python/bang-master-design-20260716-214050.md`
-
-核心决策(已评审锁定):
-- **单 agent + 工具调用**(从 Pipeline 翻转)
-- **7 态状态机**: IDLE → DISCOVER → PLAN → BUILD → QA → AWAIT_CONFIRM → DONE
-- **软关卡 + 硬验收**: 中间关卡由 agent 主动确认;只有 QA 验收是硬性关卡
-- **面向自学,不依赖教师**
-- **独立 subagent 验收**: build subagent 绝不能验收自己的产物
-- **按知识点组织,不按天规划**
-
 ## 不做什么
 
 - 不做 B2B / 机构版(用户 = 个人自学家)

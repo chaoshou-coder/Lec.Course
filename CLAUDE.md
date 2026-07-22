@@ -1,89 +1,69 @@
-# CLAUDE.md — Lec.Course 仓库工作指南
+# CLAUDE.md — Lec.Course 工作指南
 
-## What this repo is
+## 这是什么
 
-Lec.Course 是一个 **AI 驱动的课程生产框架**。用户描述想学什么,agent 自动扒知识依赖关系、推理学习路径、多 subagent 并行制课、独立 subagent 验收。
+Lec.Course 是一个 AI 驱动的课程生产框架。用户描述学习目标,agent 自动扒知识依赖、推理学习路径、并行制课、独立验收。
 
-这不是一个软件应用 —— 这是一套 **Claude Code skill + 方法论参考**。仓库的"可运行产物"是 skills 目录里的 SKILL.md 文件,不是可执行二进制。
+## 如何使用
 
-## 核心设计决策(已评审锁定)
+用户 clone 仓库后,在 Claude Code 里打开仓库文件夹,告诉 agent 你想学什么。
 
-- **单 agent + 工具调用**架构(不是 4 个独立 skill 的 Pipeline)
-- **7 态状态机**: IDLE → DISCOVER → PLAN → BUILD → QA → AWAIT_CONFIRM → DONE
-- **软关卡 + 硬验收**: 中间关卡由 agent 主动调 `ask_user` 确认;只有 QA 验收是硬性关卡
-- **面向自学,不依赖教师**: 核心产物 = self-study notes + 练习 + 验收证据
-- **独立 subagent 验收**: build subagent 绝不能验收自己的产出
+### 启动课程生产
 
-完整设计文档:`~/.gstack/projects/chaoshou-coder-Lec.Python/bang-master-design-20260716-214050.md`
+用户说"我想学 XXX"或"/course-agent"时,agent 进入 DISCOVER 态。
+
+### 工作流程
+
+1. **DISCOVER** —— 多轮问答敲定知识域、目的、深度、验收标准 → 产出 `requirements.json`
+2. **PLAN** —— 扒知识依赖 DAG、拓扑排序、推理学习序列 → 产出 `learning-plan.json`
+3. **BUILD** —— 按知识点并行制课 → 产出 `knowledge/` + `exercises/`
+4. **QA** —— 独立 subagent 验收 → 产出 `qa-report.json`
+5. **DONE** —— 交付课程产物
+
+### 产物结构
+
+```
+course-name/
+├── README.md                      # 入口:知识点地图 + 链接导航
+├── knowledge/                     # 每个知识点一个 MD
+│   ├── 01-xxx.md
+│   ├── 02-xxx.md
+│   └── ...
+├── exercises/                     # 练习文件
+│   ├── 01-xxx/
+│   │   ├── practice01-06.py
+│   │   └── task01-03.py
+│   └── ...
+└── solutions/                     # 参考答案(可选)
+```
+
+## 关键约定
+
+- **按知识点组织,不按天规划** —— 学员自己决定每天学多少
+- **每个知识点 MD 包含** —— 8 步趁热打铁(痛点→类比→解释→ASCII→代码→逐行解剖→常见错误→练习)
+- **知识点末尾有导航链接** —— 下一个/上一个知识点 + 返回知识地图
+- **ASCII 图用 plain text** —— 不用 box-drawing 字符,确保所有渲染器兼容
 
 ## 目录结构
 
 ```
 Lec.Course/
-├── CLAUDE.md              # 本文件 —— Claude Code 工作指南
-├── README.md              # 对外入口:这是什么、怎么用、用例
-├── methodology/           # 知识底座 —— 按课程开发阶段组织的方法论文档
-│   ├── 01-discover-target-domain.md
-│   ├── 02-build-knowledge-dag.md
-│   ├── 03-design-learning-sequence.md
-│   ├── 04-design-assessments.md
-│   ├── 05-production-standards.md
-│   └── 06-subject-specific-patterns.md
-├── schemas/               # 产物 schema(机器可校验)
-│   ├── requirements.schema.json
-│   ├── learning-plan.schema.json
-│   └── qa-report.schema.json
-├── scripts/
-│   └── validate.py        # schema 校验脚本
-├── skills/
-│   └── course-agent/      # 单 agent 宿主(待实施 T8)
-│       ├── SKILL.md
-│       └── state-machine.md
-└── examples/
-    └── python-60day/      # 从 Lec.Python 复制的验证样本(待实施 T3)
+├── CLAUDE.md                      # 本文件
+├── README.md                      # 项目入口
+├── methodology/                   # skill 方法论(按阶段组织)
+├── schemas/                       # 产物 schema
+├── scripts/                       # 校验工具
+└── skills/course-agent/           # skill 入口
+    ├── SKILL.md                   # agent 执行逻辑
+    └── state-machine.md           # 状态机架构
 ```
 
-## 阶段 → 方法论映射
-
-| 阶段 | 状态机态 | 方法论文档 | 核心工具 |
-|------|---------|-----------|---------|
-| 需求问答 + 研究 | DISCOVER | 01-discover-target-domain.md | web_search, ask_user |
-| DAG + 学习路径 | PLAN | 02-build-knowledge-dag.md, 03-design-learning-sequence.md | build_dag, topological_sort, prune |
-| 并行制课 | BUILD | 04-design-assessments.md, 05-production-standards.md | spawn_build_subagent, validate_schema |
-| 独立验收 | QA | (对照 requirements.md acceptance_criteria) | spawn_qa_subagent |
-
-## 产物 schema(硬性关卡)
-
-每个阶段的产出必须通过 schema 校验:
-
-| 产物 | schema | 产出态 |
-|------|--------|--------|
-| `requirements.md` | requirements.schema.json | DISCOVER |
-| `learning-plan.md` | learning-plan.schema.json | PLAN |
-| `qa-report.md` | qa-report.schema.json | QA |
+## 工具使用
 
 ```bash
-python scripts/validate.py schemas/requirements.schema.json path/to/requirements.md.json
+# schema 校验
+python scripts/validate.py schemas/requirements.schema.json path/to/requirements.json
+
+# 内容质量检查(跨语言/跨学科)
+python scripts/content-quality-check.py path/to/knowledge/
 ```
-
-## 实施顺序(关键路径)—— 全部完成 ✅
-
-```
-T1(骨架) ✅ ─▶ T2(方法论迁移) ✅ ─▶ T4(schema) ✅ ─▶ T5/T6(DISCOVER+PLAN) ✅ ─▶ T7(BUILD 知识点课程) ✅ ─▶ T8(状态机harness) ✅ ─▶ T9(README) ✅ ─▶ T10(CI) ✅
-       │                                               ▲
-       └──▶ T3(验证样本,待补) ──────────────────────────┘
-```
-
-**当前状态:** v1.0 首个端到端验证完成。HTML 基础知识案例跑通 DISCOVER → PLAN → BUILD 全管线。
-
-**下一步(可选):**
-- T3: 复制 Lec.Python 60 课为 examples/python-60day/(验证样本 + ground truth)
-- 用新知识域(如 Web Scraping / RAG)跑全流程,验证框架通用性
-- 完善 mini_project 和 weekly_projects
-- 跑 QA 验收(产出 output/qa-report.json)
-
-## 不改这些
-
-- Lec.Python 仓库的内容 —— 那是 Lec.Course 的验证样本,不是 Lec.Course 本身
-- schema 字段定义(视为 breaking change,变更需更新消费方)
-- 实施任务清单见设计文档的 Implementation Tasks 节
