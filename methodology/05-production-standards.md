@@ -215,19 +215,25 @@ except AttributeError as e:
 格式(嵌入在知识点末尾):
 
 ```markdown
-# ============ 学员代码区 ============
-# 请定义一个 Product 类(暂时用 pass),
-# 创建两个对象 p1、p2,
-# 分别给它们绑定 title 和 price,
-# 然后打印两个商品的 title。
+---
+
+## 学员代码区
+
+请定义一个 Product 类(暂时用 pass),创建两个对象 p1、p2,
+分别给它们绑定 title 和 price,然后打印两个商品的 title。
+
+​```python
 class Product:
     pass
 
-# p1 = Product()
-# p1.title = ...
+p1 = Product()
+p1.title = ...
 pass
+​```
 
-# ============ 参考答案 ============
+## 参考答案
+
+​```python
 class Product:
     pass
 
@@ -236,7 +242,47 @@ p1.title = "Python 入门"
 p1.price = 59.8
 
 print(p1.title)  # Python 入门
+​```
 ```
+
+**关键:**
+- 用 `##` 做标题(不是 `#`,`#` 会变成 H1 标题)
+- 代码必须放在 **fenced code block**(```) 内,不能裸露在 markdown 中
+
+### 6.2 Markdown 渲染安全(v1.2 通用规则)
+
+**规则:** 所有代码/标记语言示例必须放在 fenced code block 内,避免被 markdown 渲染器解析。
+
+**适用范围(不限于 HTML):**
+- Python / JavaScript / SQL / Shell 代码
+- HTML / XML / JSON / YAML 标记
+- 正则表达式
+- 任何包含 `< > & $ # *` 等特殊字符的内容
+
+**反例(会导致渲染错误):**
+
+```markdown
+❌ 错误:裸露的 HTML
+<html><head><title>我的网页</title></head></html>
+→ markdown 会把 <title> 当成 HTML 标签解析,页面显示异常
+
+❌ 错误:裸露的正则
+pattern = r'<div class="product">.*?</div>'
+→ <div class="product"> 会被当成 HTML 标签
+
+✅ 正确:fenced block 包裹
+​```python
+html = "<html><head><title>我的网页</title></head></html>"
+​```
+```
+
+**验证步骤(每个知识点产出后必做):**
+1. 用 `scripts/content-quality-check.py` 检查
+2. 在浏览器/预览中打开 MD 文件,确认代码显示正确
+3. 检查 fenced block 前没有零宽字符(U+200B)
+
+**为什么:** 不同渲染器(VS Code/GitHub/终端)对特殊字符处理不一致。
+fenced block 是唯一可靠的跨平台方案。
 
 **为什么:** 学员学完一个概念后,立即练习才能巩固。
 只在最后留练习 = 前面概念没有即时巩固。

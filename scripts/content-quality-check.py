@@ -115,8 +115,68 @@ def check_error_messages(text: str) -> dict:
     }
 
 
+def check_code_fenced(text: str) -> dict:
+    """检查代码/标记语言示例是否都在 fenced code block 内(通用规则,不限于 HTML)"""
+    # 查找所有 fenced code blocks
+    fenced_blocks = re.findall(r'```[\w]*\n(.*?)```', text, re.DOTALL)
+    fenced_code_lines = sum(len(block.strip().split('\n')) for block in fenced_blocks)
+
+    # 检查 fenced block 前是否有零宽字符(U+200B)
+    zero_width_issues = []
+    lines = text.split('\n')
+    for i, line in enumerate(lines):
+        if '```' in line and ('​' in line or '﻿' in line):  # U+200B or U+FEFF
+            zero_width_issues.append(i + 1)
+
+    # 查找裸露的代码行(不在 fenced block 内,但看起来像代码)
+    bare_lines = 0
+    bare_examples = []
+    in_fenced = False
+
+    for line in lines:
+        # 跳过 fenced block 的边界
+        if line.strip().startswith('```'):
+            in_fenced = not in_fenced
+            continue
+        if in_fenced:
+            continue
+
+        stripped = line.strip()
+        # 跳过空行和 markdown 标题
+        if not stripped or stripped.startswith('#'):
+            continue
+
+        # 跳过行内代码(被反引号包裹的)
+        if stripped.count('`') >= 2:
+            continue
+
+        # 启发式检测:看起来像代码的行(通用,不限于 Python)
+        code_indicators = [' = ', 'import ', 'def ', 'class ', 'print(', '.text', '.get(',
+                          'for ', 'if ', 'return ', 'pass', 'try:', 'except', 'function ',
+                          'var ', 'let ', 'const ', 'SELECT ', 'FROM ', 'WHERE ',
+                          'echo ', 'ls ', 'cd ', 'mkdir ']
+        if any(indicator in stripped for indicator in code_indicators):
+            # 排除 markdown 表格行和列表项
+            if stripped.startswith('|') or stripped.startswith('- ') or stripped.startswith('* '):
+                continue
+            # 排除定义性文字(如 **HTML = 超文本标记语言**)
+            if stripped.startswith('**') and '**' in stripped[2:]:
+                continue
+            bare_lines += 1
+            if len(bare_examples) < 3:
+                bare_examples.append(stripped[:50])
+
+    return {
+        'fenced_code_lines': fenced_code_lines,
+        '裸露_code_lines': bare_lines,
+        'zero_width_issues': zero_width_issues,
+        'bare_examples': bare_examples,
+        'pass': bare_lines == 0 and len(zero_width_issues) == 0
+    }
+
+
 def check_code_comments(text: str) -> dict:
-    """检查代码块内是否有足够的行注释"""
+    """检查代码块内是否有足够的注释(行内注释或执行过程跟踪)"""
     # 查找代码块(```...``` 或 缩进代码)
     code_blocks = re.findall(r'```[\w]*\n(.*?)```', text, re.DOTALL)
 
@@ -130,9 +190,14 @@ def check_code_comments(text: str) -> dict:
 
     total_lines = 0
     commented_lines = 0
+    execution_traced_lines = 0
 
     for block in code_blocks:
         lines = block.strip().split('\n')
+        # 检查这个代码块是否有执行过程跟踪
+        has_execution_trace = any('--- 执行过程 ---' in line or '执行过程' in line for line in lines)
+        has_numbered_steps = bool(re.search(r'[①②③④⑤⑥]', block))
+
         for line in lines:
             stripped = line.strip()
             if not stripped or stripped.startswith('#') or stripped.startswith('//'):
@@ -142,6 +207,12 @@ def check_code_comments(text: str) -> dict:
             if '#' in stripped or '//' in stripped or '/*' in stripped:
                 commented_lines += 1
 
+        # 如果代码块有执行过程跟踪,该块所有代码行都算"已注释"
+        if has_execution_trace and has_numbered_steps:
+            code_line_count = sum(1 for line in lines
+                                  if line.strip() and not line.strip().startswith('#'))
+            execution_traced_lines += code_line_count
+
     if total_lines == 0:
         return {
             'has_code': True,
@@ -149,14 +220,16 @@ def check_code_comments(text: str) -> dict:
             'comment_ratio': None
         }
 
-    ratio = commented_lines / total_lines if total_lines > 0 else 0
+    # 已注释行 = 行内注释 + 有执行跟踪的代码块中的所有代码行
+    total_commented = commented_lines + execution_traced_lines
+    ratio = total_commented / total_lines if total_lines > 0 else 0
 
     return {
         'has_code': True,
         'total_code_lines': total_lines,
-        'commented_lines': commented_lines,
+        'commented_lines': total_commented,
         'comment_ratio': round(ratio, 2),
-        'pass': ratio >= 0.4  # 至少 40% 的代码行有注释(复杂概念可适当降低)
+        'pass': ratio >= 0.4  # 至少 40% 的代码行有注释(行内或执行跟踪)
     }
 
 
@@ -179,12 +252,13 @@ def check_knowledge_file(filepath: Path) -> dict:
         'student_practice': check_student_practice(text),
         'error_messages': check_error_messages(text),
         'code_comments': check_code_comments(text),
+        'code_fenced': check_code_fenced(text),
     }
 
     # 总体是否通过
     results['pass'] = all(
         results[k]['pass'] for k in ['numbered_steps', 'break_it', 'student_practice',
-                                      'error_messages', 'code_comments']
+                                      'error_messages', 'code_comments', 'code_fenced']
     )
 
     return results
@@ -240,6 +314,13 @@ def check_knowledge_path(knowledge_path: str) -> int:
                         detail += f"错误段存在: {check_result['has_error_section']})"
                     elif check_name == 'code_comments' and check_result.get('has_code'):
                         detail = f"(注释覆盖率: {check_result['comment_ratio']*100:.0f}%)"
+                    elif check_name == 'code_fenced':
+                        detail = f"(裸露代码行: {check_result['裸露_code_lines']}"
+                        if check_result.get('zero_width_issues'):
+                            detail += f", 零宽字符: {check_result['zero_width_issues']}"
+                        if check_result.get('bare_examples'):
+                            detail += f", 示例: {check_result['bare_examples'][:2]}"
+                        detail += ")"
 
                     print(f"   ❌ {check_name}: 未通过 {detail}")
                     errors.append(f"{md_file.name} -> {check_name}")
