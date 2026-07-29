@@ -2,7 +2,7 @@
 
 > **归属阶段:** PLAN (状态机 `PLAN` 态核心参考)
 > **用途:** 在知识依赖图(DAG)拓扑排序的基础上,安排具体到天的学习顺序,平衡认知负荷和教学效率。
-> **适用场景:** 把 `02-build-knowledge-dag.md` 产出的 DAG 转成 `learning-plan.md` 的 daily lesson_plan。
+> **适用场景:** 把 `02-build-knowledge-dag.md` 产出的 DAG 转成 `learning-plan.json` 的 daily lesson_plan。
 
 ---
 
@@ -10,10 +10,10 @@
 
 **输入:**
 - 来自 `02-build-knowledge-dag.md` 的 DAG: 节点(`dag_nodes`)、边(`dag_edges`)、拓扑排序结果
-- 来自 `requirements.md` 的 `daily_hours`(每日可用时长,仅供参考)和 `depth_goal`
+- 来自 `requirements.json` 的 `daily_hours`(每日可用时长,仅供参考)和 `depth_goal`
 
 **输出:**
-- `learning-plan.md` 的 `lesson_plan` 字段: 每个学习单元学哪些节点、目标是什么、预计多久
+- `learning-plan.json` 的 `lesson_plan` 字段: 每个学习单元学哪些节点、目标是什么、预计多久
 
 ---
 
@@ -130,7 +130,7 @@ topological_order = [
 
 ## 交叉参考
 
-- **上游:** `02-build-knowledge-dag.md`(产出 DAG 和拓扑排序)、`requirements.md`(daily_hours / depth_goal)
-- **下游:** BUILD 态的并行子 agent 调度(每个知识点 = 一个子 agent)、`04-design-assessments.md`(每个知识点的练习设计)
-- **产物:** `learning-plan.md`(PLAN 态硬性产出,含 lesson_plan)
+- **上游:** `02-build-knowledge-dag.md`(产出 DAG 和拓扑排序)、`requirements.json`(daily_hours / depth_goal)
+- **下游:** BUILD 态的知识点顺序调度、`04-design-assessments.md`(每个知识点的练习设计)
+- **产物:** `learning-plan.json`(PLAN 态硬性产出,含 lesson_plan)
 - **验证:** QA 态检查 lesson_plan 的前置完整性和 daily_hours 合规性

@@ -90,7 +90,7 @@ A → B 表示"必须先掌握 A,才能学 B"。
 | **能写** | 能独立写出代码实现 | ⭐⭐⭐ 题(组合应用) |
 | **能教** | 能给别人讲清楚原理 | ⭐⭐⭐⭐ 题(抽象建模) |
 
-**标注依据:** `requirements.md` 里的 `depth_goal` 字段。`depth_goal = 能写` → 整张图的默认最低要求是"能写",只有真正需要深入的节点升级到"能教"。
+**标注依据:** `requirements.json` 里的 `depth_goal` 字段。`depth_goal = 能写` → 整张图的默认最低要求是"能写",只有真正需要深入的节点升级到"能教"。
 
 ---
 
@@ -103,7 +103,7 @@ A → B 表示"必须先掌握 A,才能学 B"。
 2. 若某知识点被更具体的知识点完全覆盖(父节点被子里节点覆盖) → 裁剪父节点
 3. 弱依赖的叶节点,如果标注为"了解"且时间预算紧 → 可裁剪,放到"可选资料"
 
-**每个被剪掉的节点必须记录到 `learning-plan.md` 的 `pruned_branches` 字段**,说明裁剪理由。用户可以人工补回。
+**每个被剪掉的节点必须记录到 `learning-plan.json` 的 `pruned_branches` 字段**,说明裁剪理由。用户可以人工补回。
 
 ---
 
@@ -132,7 +132,7 @@ A → B 表示"必须先掌握 A,才能学 B"。
 
 ## 6. 实操示例结构
 
-输出 `learning-plan.md` 时,DAG 部分应包含:
+输出 `learning-plan.json` 时,DAG 部分应包含:
 
 ```markdown
 ## 知识依赖图(DAG)
@@ -201,6 +201,6 @@ agent 不能自行决定剪枝。剪枝后必须在 AWAIT_CONFIRM 阶段让用�
 
 ## 交叉参考
 
-- **上游:** `requirements.md`(来自 DISCOVER 态,定义了 target_capability / depth_goal / current_level)
+- **上游:** `requirements.json`(来自 DISCOVER 态,定义了 target_capability / depth_goal / current_level)
 - **下游:** `03-design-learning-sequence.md`(拓扑排序后按天编排的具体原则)
-- **质量控制:** `qa-report.md` 的"内容正确性"检查会对照 acceptance_criteria 验证 DAG 推理是否达成目标
+- **质量控制:** `qa-report.json` 的"内容正确性"检查会对照 acceptance_criteria 验证 DAG 推理是否达成目标

@@ -8,7 +8,7 @@
 
 ## 1. 研究在 DISCOVER 阶段的位置
 
-DISCOVER 态的核心任务是产出 `requirements.md`。agent 不能只靠和用户问答 —— 还需要**实时研究目标域**,才能:
+DISCOVER 态的核心任务是产出 `requirements.json`。agent 不能只靠和用户问答 —— 还需要**实时研究目标域**,才能:
 - 帮用户把模糊的目标("我想学 AI")收敛成可验证的终点能力("用 HuggingFace LoRA 微调一个文本分类模型")
 - 验证用户设定的 depth_goal 是否合理
 - 为后续 PLAN 态的 DAG 推理收集 gold-set 候选课程
@@ -109,7 +109,7 @@ W10: Searching and Sorting
 
 ## 5. 研究结果的消费方式
 
-DISCOVER 态产出的研究成果写入 `requirements.md` 的几个字段:
+DISCOVER 态产出的研究成果写入 `requirements.json` 的几个字段:
 
 | 研究成果 | 写入字段 |
 |---|---|
@@ -117,7 +117,7 @@ DISCOVER 态产出的研究成果写入 `requirements.md` 的几个字段:
 | 学员当前水平(对比参照课后) | `current_level` |
 | 合理的深度建议 | `depth_goal` |
 | 找到的参照课程列表 | `constraints` 里的"参照课程"子字段 |
-| 研究是否成功 | `requirements.md` 顶层字段 `research_grounded: true/false` |
+| 研究是否成功 | `requirements.json` 顶层字段 `research_grounded: true/false` |
 
 **降级策略:** 如果 web_search 不可用,标注 `research_grounded: false`,并在 README 里提示用户手动验证关键依赖。
 
@@ -203,4 +203,4 @@ acceptance_criteria 的"理解层"必须用以下形式:
 
 - **上游:** 用户启动 /course-agent 时的初始描述
 - **下游:** `02-build-knowledge-dag.md`(用这里提取的章节顺序作为 gold-set 验证 DAG)
-- **产物:** `requirements.md`(DISCOVER 态的硬性产出)
+- **产物:** `requirements.json`(DISCOVER 态的硬性产出)

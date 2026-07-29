@@ -2,7 +2,7 @@
 
 ## 这是什么
 
-Lec.Course 是一个 AI 驱动的课程生产框架。用户描述学习目标,agent 自动扒知识依赖、推理学习路径、并行制课、独立验收。
+Lec.Course 是一个 AI 驱动的课程生产框架。用户描述学习目标,单 agent 自动扒知识依赖、推理学习路径、按知识点制课、独立验收。
 
 ## 如何使用
 
@@ -16,8 +16,8 @@ Lec.Course 是一个 AI 驱动的课程生产框架。用户描述学习目标,a
 
 1. **DISCOVER** —— 多轮问答敲定知识域、目的、深度、验收标准 → 产出 `requirements.json`
 2. **PLAN** —— 扒知识依赖 DAG、拓扑排序、推理学习序列 → 产出 `learning-plan.json`
-3. **BUILD** —— 按知识点并行制课 → 产出 `knowledge/` + `exercises/`
-4. **QA** —— 独立 subagent 验收 → 产出 `qa-report.json`
+3. **BUILD** —— 按知识点顺序制课 → 产出 `knowledge/` + `exercises/`
+4. **QA** —— 独立验收(同一 agent,不读 BUILD 上下文) → 产出 `qa-report.json`
 5. **DONE** —— 交付课程产物
 
 ### 产物结构
@@ -40,7 +40,8 @@ course-name/
 ## 关键约定
 
 - **按知识点组织,不按天规划** —— 学员自己决定每天学多少
-- **每个知识点 MD 包含** —— 8 步趁热打铁(痛点→类比→解释→ASCII→代码→逐行解剖→常见错误→练习)
+- **每个知识点(#### 节)包含** —— 8 步趁热打铁(痛点→类比→解释→ASCII→代码→逐行解剖→常见错误→练习)
+- **每个知识点末尾有练习区** —— 学员代码区 + 参考答案(不是只在每天末尾)
 - **知识点末尾有导航链接** —— 下一个/上一个知识点 + 返回知识地图
 - **ASCII 图用 plain text** —— 不用 box-drawing 字符,确保所有渲染器兼容
 
@@ -69,6 +70,9 @@ python scripts/content-quality-check.py path/to/knowledge/
 
 # 渲染检查(heading 层级 + 重复标题 + 旧格式残留 + 零宽字符)
 python scripts/render-check.py path/to/knowledge/
+
+# 防回归检查(文件后缀 + 8 步循环 + 练习标注)
+python scripts/regression-check.py path/to/course/
 ```
 
 ## Skill 迭代方法论
@@ -84,4 +88,4 @@ python scripts/render-check.py path/to/knowledge/
 - `content-quality-check.py` —— 结构检查(8 步循环、fenced block、注释密度)
 - `render-check.py` —— 渲染检查(heading 层级、重复标题、旧格式残留、零宽字符)
 
-**迭代日志:** `output/iteration-log.md`(17 轮迭代记录)
+**迭代日志:** `output/iteration-log.md`(18 轮迭代记录,R1-R18)

@@ -1,6 +1,6 @@
 # /course-agent — 课程生产单 agent
 
-> 一个 agent 驱动课程生产的全流程:需求问答 → 知识依赖推理 → 并行制课 → 独立验收。
+> 一个 agent 驱动课程生产的全流程:需求问答 → 知识依赖推理 → 按知识点制课 → 独立验收。
 > 状态机架构,软关卡 + 硬验收。
 
 ## 启动
@@ -58,25 +58,24 @@
 
 ---
 
-### BUILD —— 并行 spawn subagent 制课
+### BUILD —— 按知识点顺序制课
 
 **参考:** `methodology/04-design-assessments.md`, `methodology/05-production-standards.md`
 
 **执行:**
-1. 按 lesson_plan 的每天 spawn 一个 build subagent(并行,无共享 mutable state)
-2. 每个 subagent 负责一天的产出:
-   - `course/lessonXX/notes.md`(8 步趁热打铁笔记)
-   - `course/lessonXX/README.md`(当天入口)
-   - `course/lessonXX/in_class/practice01-06.{ext}`(6 道当堂练)
-   - `course/lessonXX/homework/task01-03.{ext}`(3 道课后作业)
-3. subagent 写完后用 `scripts/validate.py` 校验产出
-4. 失败的 lesson 单独标记,不阻塞其他 lesson
+1. 按 lesson_plan 的每个知识点顺序产出(单 agent,不并行)
+2. 每个知识点产出:
+   - `knowledge/NN-title.md`(8 步趁热打铁笔记,含知识地图)
+   - `exercises/NN-title/practice01-06.{ext}`(6 道当堂练)
+   - `exercises/NN-title/task01-03.{ext}`(3 道课后作业)
+3. 每个知识点写完后用 `scripts/content-quality-check.py` + `scripts/render-check.py` 校验
+4. 失败的知识点单独标记,重试
 
 **教学法触发(v1.1 R3):**
 
-当 `lesson_plan` 的节点带 `teaching_method` 字段时,notes.md 必须包含对应结构:
+当 `learning-plan.json` 的节点带 `teaching_method` 字段时,知识点 MD 必须包含对应结构:
 
-| teaching_method | notes.md 必须含 | 练习必须含 |
+| teaching_method | 知识点 MD 必须含 | 练习必须含 |
 |---|---|---|
 | `ncdl` | Break It 演示段(故意写错代码 → Traceback → Fix) | 至少 1 道找出反模式的题 |
 | `dual_layer` | 叙事锚点段(80% 教学时间)+语法点独立样本段 | 业务代码练习 |
@@ -94,37 +93,33 @@
 
 不强制但强烈建议——避免学员混用运行环境。
 
-**并行协调:**
-- 每个 subagent 写到自己隔离的 `course/lessonXX/` 目录
-- 无共享 mutable state,不写共享 manifest
-- 失败的 lesson 单独重跑
-
 **BUILD 自检清单(v1.3 R12):**
 
-每个 lesson 产出后,BUILD 必须对照 PLAN 的 pedagogy_notes 自检:
+每个知识点产出后,BUILD 必须对照 PLAN 的 pedagogy_notes 自检:
 
 | 自检项 | 检查方式 |
 |--------|---------|
-| pedagogy_notes 落地 | notes.md 中哪里体现了 PLAN 标注的编排原则? |
+| pedagogy_notes 落地 | 知识点 MD 中哪里体现了 PLAN 标注的编排原则? |
 | teaching_method 触发 | 标了 ncdl 的节点是否有 Break It 段? 标了 consumer_gate 的节点是否有消费者函数? |
-| 明日衔接 | notes.md 末尾是否有"明日衔接"段? |
+| 下一知识点衔接 | 知识点 MD 末尾是否有导航链接? |
 | 8 步循环 | 痛点/类比/解释/ASCII/执行过程/常见错误/学员代码区/参考答案 是否都在? |
 
-自检结果写入 `course/lessonXX/README.md` 的"BUILD 自检"段。
+自检结果写入 `knowledge/NN-title.md` 末尾的"BUILD 自检"段。
 
-**转移:** 所有 lesson 完成 → `QA`
+**转移:** 所有知识点完成 → `QA`
 
 ---
 
-### QA —— 独立 subagent 验收
+### QA —— 独立验收(同一 agent,不读 BUILD 上下文)
 
 **执行:**
-1. spawn 全新的 QA subagent(**不读取任何 build subagent 的产出上下文**)
-2. QA subagent 接收 `requirements.md` + `learning-plan.md` + 被审课程材料
+1. QA 阶段由同一 agent 执行,但不读取 BUILD 产出的上下文(只看产物文件)
+2. QA 接收 `requirements.json` + `learning-plan.json` + 被审课程材料
 3. 双轨验收:
    - **结构检查**(无需深领域知识): 所有产物文件存在、格式符合 `05-production-standards.md`
    - **内容正确性**(需要领域推理): 对照 `acceptance_criteria` 判定是否达成目标
-4. 产出 `output/qa-report.json`,用 `scripts/validate.py` 校验
+4. 用 `scripts/content-quality-check.py` + `scripts/render-check.py` 校验知识文件
+5. 产出 `output/qa-report.json`,用 `scripts/validate.py` 校验
 
 **QA 跨阶段对照(v1.3 R12):**
 
@@ -132,7 +127,7 @@ QA 不仅查 BUILD 产出,还要对照上游阶段:
 
 | 对照项 | 检查方式 |
 |--------|---------|
-| PLAN pedagogy_notes → BUILD 落地 | Day 1 标了"工具先行",notes.md 是否有可运行代码? |
+| PLAN pedagogy_notes → BUILD 落地 | Day 1 标了"工具先行",知识点 MD 是否有可运行代码? |
 | DISCOVER criteria → BUILD 覆盖 | 每条 acceptance_criteria 是否都有对应练习? |
 | teaching_method → 内容 | 标 ncdl 的节点是否有 Break It 段? |
 
@@ -167,12 +162,14 @@ agent 进入此状态时:
 |------|------|--------|--------|
 | 课程需求 | `output/requirements.json` | DISCOVER | `schemas/requirements.schema.json` |
 | 学习计划 | `output/learning-plan.json` | PLAN | `schemas/learning-plan.schema.json` |
-| 每日课程 | `course/lessonXX/` | BUILD | — |
+| 知识点材料 | `knowledge/NN-title.md` | BUILD | — |
+| 练习文件 | `exercises/NN-title/` | BUILD | — |
 | 验收报告 | `output/qa-report.json` | QA | `schemas/qa-report.schema.json` |
 
 ## 关键约束
 
-- **独立验收:** build subagent 绝不能验收自己的产出(QA 永远是全新 subagent)
+- **独立验收:** QA 阶段不读取 BUILD 上下文(只看产物文件)
 - **硬关卡只有 QA:** 中间关卡都是软关卡(agent 主动征求确认)
 - **schema 校验:** 每个阶段的硬性产出必须通过 `scripts/validate.py`
+- **内容质量校验:** BUILD 产出必须通过 `scripts/content-quality-check.py` + `scripts/render-check.py`
 - **回退是显式的:** 由 `qa-report.recommended_action` 或用户指令触发,不靠 agent 自行决定

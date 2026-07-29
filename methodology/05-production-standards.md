@@ -1,8 +1,8 @@
-# 05 · 自学材料排版规范 —— build subagent 产出笔记时必须遵守的格式标准
+# 05 · 自学材料排版规范 —— BUILD 产出笔记时必须遵守的格式标准
 
-> **归属阶段:** BUILD (每个 build subagent 强制参考) + QA (structural_check 依据)
+> **归属阶段:** BUILD (单 agent 强制参考) + QA (structural_check 依据)
 > **用途:** 所有自学笔记材料(self-study notes,取代课堂 slides)必须遵守的排版标准。这是 QA 态 structural_check 的直接依据。
-> **版本:** v3.0(2026-07-14),以 OOP 封装/继承/多态/组合 notebook 为 gold standard 重写
+> **版本:** v3.1(2026-07-29),新增每知识点练习区 + 渲染安全通用规则
 > **关键升级:** 8 步趁热打铁循环 + ASCII 内存图 + NCDL Break It + 常见错误
 
 ---
@@ -175,7 +175,7 @@ __init__ 执行过程:
 ```
 
 **规则:**
-- 每条必须包含**具体的 Python 报错信息**(如 `TypeError: ...`),不能写"会报错"
+- 每条必须包含**具体的报错信息**(如 `TypeError: ...`、`Error: ...`、`错误`),不能写"会报错"
 - 必须说明**原因**和**修正方式**
 - 每个知识点 ≥ 2 条常见错误
 
@@ -183,8 +183,8 @@ __init__ 执行过程:
 
 ## 6. NCDL Break It 模式(负案例驱动学习,v1.2 R12 强制)
 
-**强制规则:** 当 `learning-plan.md` 中节点标注 `teaching_method: ncdl` 时,
-该知识点的 notes.md **必须包含** Break It 演示段。
+**强制规则:** 当 `learning-plan.json` 中节点标注 `teaching_method: ncdl` 时,
+该知识点的 MD **必须包含** Break It 演示段。
 
 格式:
 
@@ -305,7 +305,7 @@ fenced block 是唯一可靠的跨平台方案。
 | 06 | 容器 | +列表/字典 | class |
 | 07+ | OOP | +class/OOP | 外部库 |
 
-**关键:** 编写任何材料前必须对照 `learning-plan.md` 确认该知识点的**前置依赖已覆盖**,不能假设学员已经学会后续知识点。学员按自己的节奏学习,但知识点的依赖关系必须被尊重。
+**关键:** 编写任何材料前必须对照 `learning-plan.json` 确认该知识点的**前置依赖已覆盖**,不能假设学员已经学会后续知识点。学员按自己的节奏学习,但知识点的依赖关系必须被尊重。
 
 ---
 

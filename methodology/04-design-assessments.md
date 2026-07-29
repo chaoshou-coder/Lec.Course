@@ -1,8 +1,8 @@
 # 04 · 试题集组织方法 —— 如何为每天的学习设计三层试题集
 
-> **归属阶段:** BUILD (状态机 `BUILD` 态参考,每个 build subagent 使用)
+> **归属阶段:** BUILD (状态机 `BUILD` 态参考)
 > **用途:** 为每个知识点系统设计当堂练(practice) + 课后作业(task) + 综合项目(weekly project)三层试题集。
-> **适用场景:** build subagent 制课过程中,为每天的 lesson 产出配套练习。
+> **适用场景:** 单 agent 制课过程中,为每个知识点产出配套练习。
 
 ---
 
@@ -26,7 +26,7 @@
 | 能写 | 能独立写出代码实现 | ★★★ 题(组合应用) |
 | 能教 | 能给别人讲清楚原理 | ★★★★ 题(抽象建模) |
 
-build subagent 在为某个节点设计习题时,难度不应超过该节点的 min_requirement 对应的"天花板"。
+BUILD 在为某个节点设计习题时,难度不应超过该节点的 min_requirement 对应的"天花板"。
 
 ---
 
@@ -144,7 +144,7 @@ Day 5 课后作业:
 
 ## 交叉参考
 
-- **上游:** `learning-plan.md`(BUILD 态知道今天要教哪些节点及其 min_requirement)
+- **上游:** `learning-plan.json`(BUILD 态知道今天要教哪些节点及其 min_requirement)
 - **上游:** `03-design-learning-sequence.md`(知道哪天是缓冲日,缓冲日不排新课但可排综合项目)
 - **下游:** QA 态的 structural_check(校验 exercise 文件模板是否符合规范)
 - **规范:** `05-production-standards.md`(exercise 文件的排版和 8 步趁热打铁循环结构)
