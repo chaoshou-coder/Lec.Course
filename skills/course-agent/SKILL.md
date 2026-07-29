@@ -27,8 +27,9 @@
 2. 多轮 `ask_user` 敲定其他要素:学员画像、深度、每日时长、验收标准
 3. 询问并发度偏好(`build_parallelism` / `qa_parallelism`),见 BUILD/QA 段
 4. 用 `web_search` 研究目标域(藤校课程优先),找到 2-3 门参照课程
-5. 验证用户设定的 depth_goal 是否合理
-6. 产出 `output/requirements.json`(含 `specific_purpose` + `parallelism`),用 `scripts/validate.py` 校验
+5. **搜索失败处理(强制):** 如果搜索工具未返回实时结果,**禁止**自作主张继续,**必须**停下来向用户说明失败原因并请求手动提供参照或确认跳过
+6. 验证用户设定的 depth_goal 是否合理
+7. 产出 `output/requirements.json`(含 `specific_purpose` + `parallelism`),用 `scripts/validate.py` 校验
 
 **软关卡:** 产出后进 `AWAIT_CONFIRM`,向用户展示:
 - 终点能力定义

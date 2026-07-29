@@ -167,7 +167,18 @@ DISCOVER 态产出的研究成果写入 `requirements.json` 的几个字段:
 | 找到的 GitHub 高星项目 | `reference_resources`(type=github) |
 | 研究是否成功 | `requirements.json` 顶层字段 `research_grounded: true/false` |
 
-**降级策略:** 如果 web_search 不可用,标注 `research_grounded: false`,并在 README 里提示用户手动验证关键依赖。
+**搜索失败处理(强制规则):**
+
+当搜索工具(web_search / web_fetch)未返回实时结果(无网络、API 错误、返回空结果)时:
+
+1. **禁止** agent 自作主张继续推理或编造参照课程
+2. **必须** 停下来,向用户明确说明:
+   - 哪个搜索失败了(搜索了什么关键词)
+   - 失败原因(无网络 / API 错误 / 返回空)
+   - 请求用户手动提供 1-3 个参照课程/资源,或确认跳过研究
+3. **用户回复后** 继续;如果用户选择跳过,标注 `research_grounded: false` 并在 README 里提示
+
+**为什么:** 参照课程是 PLAN 阶段的 gold-set 输入。如果参照是 agent 编造的,DAG 推理可能错误,导致整个课程结构偏差。宁可停下来问,也不要带着错误前提继续。
 
 ---
 
