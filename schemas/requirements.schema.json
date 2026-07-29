@@ -77,14 +77,14 @@
     },
     "reference_resources": {
       "type": "array",
-      "description": "参考资料(博客/视频/awesome-list 等非结构化资源)",
+      "description": "参考资料(GitHub 高星项目/博客/视频/awesome-list 等)",
       "items": {
         "type": "object",
         "required": ["name", "source", "type"],
         "properties": {
           "name": { "type": "string" },
           "source": { "type": "string" },
-          "type": { "type": "string", "enum": ["blog", "video", "awesome_list", "docs"], "description": "资源类型" }
+          "type": { "type": "string", "enum": ["github", "blog", "video", "awesome_list", "docs"], "description": "资源类型" }
         }
       }
     },

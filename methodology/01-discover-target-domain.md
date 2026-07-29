@@ -17,45 +17,92 @@ DISCOVER 态的核心任务是产出 `requirements.json`。agent 不能只靠和
 
 ---
 
-## 2. 推荐搜索路径
+## 2. 推荐搜索路径(优先级排序)
 
-### 2.1 藤校公开课优先
+### 2.1 第一优先级:藤校公开课
 
-| 优先级 | 来源 | 代表课程 | 为什么优先 |
-|---|---|---|---|
-| ⭐⭐⭐⭐⭐ | MIT OCW / MITx | 6.0001, 6.0002, 6.036 | 课程大纲完整,PS/考试公开,学术严谨 |
-| ⭐⭐⭐⭐⭐ | Harvard / edX | CS50P, CS50AI | 项目驱动,check50 自动评测,适合习题参考 |
-| ⭐⭐⭐⭐ | Stanford / Coursera | CS229, CS231n, CS224N | ML/DL/NLP 标杆,讲义极高质量 |
-| ⭐⭐⭐⭐ | UC Berkeley | CS61A, CS188, Data 8 | 计算思维导向,适合 Python 入门参考 |
-| ⭐⭐⭐ | 经典免费教材 | Think Python 2E, py4e, ATBS | 免费在线阅读,习题丰富 |
-
-### 2.2 为什么商业化课程不宜直接参照?
-
-商业化课程(Udemy / 极客时间 / 慕课网等)的目标函数不同:
-
-| 维度 | 开源/藤校 | 商业化 |
+| 来源 | 代表课程 | 为什么优先 |
 |---|---|---|
-| **目标** | 知识体系完整 | 完课率、好评率、销量 |
-| **深度** | 宁可难也要讲透 | 宁可浅也要"听得懂" |
-| **习题** | 有挑战,鼓励犯错 | 平滑,避免学员卡住 |
-| **更新** | 学术驱动,慢但准 | 市场驱动,快但可能跟风 |
+| MIT OCW / MITx | 6.0001, 6.0002, 6.036 | 课程大纲完整,PS/考试公开,学术严谨 |
+| Harvard / edX | CS50P, CS50AI | 项目驱动,check50 自动评测,适合习题参考 |
+| Stanford / Coursera | CS229, CS231n, CS224N | ML/DL/NLP 标杆,讲义极高质量 |
+| UC Berkeley | CS61A, CS188, Data 8 | 计算思维导向,适合 Python 入门参考 |
+| 经典免费教材 | Think Python 2E, py4e, ATBS | 免费在线阅读,习题丰富 |
 
-**用法:** 用藤校课程定骨架,用商业化课程定热点,用社区(GitHub/知乎)定习题素材。
+### 2.2 第二优先级:业内大牛的课程/内容
 
-### 2.3 搜索关键词模板
+**定义:** 某个领域里有"教父级"地位的人物的课程/博客/视频。他们的内容往往比藤校更深入、更贴近实战。
+
+| 人物 | 领域 | 代表作 | 为什么优先 |
+|---|---|---|---|
+| Andrej Karpathy | ML/DL | CS231n(原讲者), Neural Networks: Zero to Hero, LLM.cafe | 把复杂概念讲到能动手实现 |
+| Jeremy Howard | 深度学习 | fast.ai 课程 | 自上而下教学,实战优先 |
+| Brian Kernighan | C/Unix | The Unix Programming Environment | Unix 之父级人物 |
+| Martin Fowler | 软件架构 | Refactoring, Patterns of Enterprise Application Architecture | 重构/模式领域权威 |
+| Dan Abramov | React/前端 | Just JavaScript, Overreacted blog | Redux 作者,概念讲解极清晰 |
+| Will Larson | 工程管理 | An Elegant Puzzle, Staff Engineer | 工程领导力领域权威 |
+| 阮一峰 | 前端/通用 | 阮一峰的网络日志, ECMAScript 6 入门 | 中文技术写作标杆 |
+| 陈天奇 | ML 系统 | XGBoost, TVM | ML 系统领域顶尖 |
+
+**如何找到大牛:**
+1. 问:"这个领域里,谁写的书/课被引用最多?"
+2. 看 GitHub 上该领域的 awesome-list,看谁被反复推荐
+3. 看顶级会议(NeurIPS/SOSP/SIGMOD)的 tutorial 讲者
+
+### 2.3 第三优先级:GitHub 高星项目
+
+**定义:** GitHub 上 star 数 > 5000 的项目,往往是某个事实标准的实现或教程。
+
+| 类型 | 示例 | 为什么优先 |
+|---|---|---|
+| 官方文档/教程 | tensorflow/tensorflow, pytorch/pytorch | 最权威,附带 examples |
+| 高星教程 | jwasham/coding-interview-university, kamranahmedse/developer-roadmap | 社区验证的学习路径 |
+| 实战项目 | public-apis/public-apis, awesome-* 系列 | 真实代码,可拆解为练习 |
+
+**搜索技巧:**
+```
+"<topic>" site:github.com stars:>5000
+"<topic> tutorial" site:github.com stars:>1000
+"awesome <topic>" site:github.com
+```
+
+### 2.4 避免使用的来源
+
+| 来源 | 为什么避免 |
+|---|---|
+| **商业化课程**(Udemy / 极客时间 / 慕课网 / 极客时间) | 目标函数是完课率/销量,深度不足,习题过于平滑 |
+| **论坛帖子**(Stack Overflow / Reddit / V2EX / 知乎问答) | 碎片化,缺乏体系,可能有错误 |
+| **个人博客**(非大牛) | 质量参差不齐,可能过时 |
+| **YouTube 短视频**(非系统课程) | 缺乏深度,娱乐化倾向 |
+
+**例外:** 论坛帖子可以用来**验证某个知识点的常见误解**(作为 NCDL 反模式素材),但不能作为课程骨架。
+
+### 2.5 搜索关键词模板
 
 ```
-# 入门级
-"Introduction to Python" site:ocw.mit.edu
-"Python for Everybody" site:coursera.org
+# 藤校公开课(第一优先)
+"<topic> syllabus" site:ocw.mit.edu
+"<topic> course" site:stanford.edu
+"CS50 <topic>" site:harvard.edu
 
-# 进阶级
-"Machine Learning" site:stanford.edu CS229
-"Deep Learning" site:cs231n.stanford.edu
+# 大牛课程(第二优先)
+"<guru name> <topic> course"
+"<guru name> <topic> tutorial"
+"<topic> best course" site:medium.com author:<guru>
 
-# 习题素材
-"Python exercises" site:github.com stars:>1000
-"Python projects for beginners" site:realpython.com
+# GitHub 高星(第三优先)
+"<topic> tutorial" site:github.com stars:>1000
+"awesome <topic>" site:github.com
+"<topic> examples" site:github.com stars:>5000
+```
+
+### 2.6 用法总结
+
+```
+课程骨架 = 藤校公开课(体系严谨)
+深度补充 = 大牛课程(实战深入)
+习题素材 = GitHub 高星项目(真实代码)
+反模式素材 = 论坛帖子(常见误解)
 ```
 
 ---
@@ -98,12 +145,12 @@ W10: Searching and Sorting
 
 | 评估维度 | 高可信 | 低可信 |
 |---|---|---|
-| **来源** | 官方 syllabus / 同行评审 | 个人博客 / 营销文案 |
+| **来源** | 藤校公开课 / 业内大牛课程 / GitHub 高星项目 | 商业化课程 / 论坛帖子 / 个人博客(非大牛) |
 | **时效** | 3 年内更新 | 5 年以上未更新 |
 | **完整度** | 有 syllabus + 作业 + 考试 | 只有标题列表 |
-| **社区验证** | GitHub star > 1000 / 引用多 | 无引用 / 单来源 |
+| **社区验证** | GitHub star > 5000 / 引用多 | 无引用 / 单来源 |
 
-**用法:** 优先使用高可信来源构建 gold-set,低可信来源只用于"看市场热点"。
+**用法:** 优先使用高可信来源构建 gold-set,低可信来源只用于"看市场热点"或"反模式素材"。
 
 ---
 
@@ -116,7 +163,8 @@ DISCOVER 态产出的研究成果写入 `requirements.json` 的几个字段:
 | 终点能力定义 | `target_capability` |
 | 学员当前水平(对比参照课后) | `current_level` |
 | 合理的深度建议 | `depth_goal` |
-| 找到的参照课程列表 | `constraints` 里的"参照课程"子字段 |
+| 找到的参照课程列表(藤校+大牛) | `reference_courses` |
+| 找到的 GitHub 高星项目 | `reference_resources`(type=github) |
 | 研究是否成功 | `requirements.json` 顶层字段 `research_grounded: true/false` |
 
 **降级策略:** 如果 web_search 不可用,标注 `research_grounded: false`,并在 README 里提示用户手动验证关键依赖。
