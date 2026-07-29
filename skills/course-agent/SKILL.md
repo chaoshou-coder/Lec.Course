@@ -86,9 +86,14 @@
    - `knowledge/NN-title.md`(8 步趁热打铁笔记,含知识地图)
    - `exercises/NN-title/practice01-06.{ext}`(6 道当堂练)
    - `exercises/NN-title/task01-03.{ext}`(3 道课后作业)
-3. subagent 写完后用 `scripts/content-quality-check.py` + `scripts/render-check.py` 校验
-4. 失败的知识点单独标记,由主 agent 重试或重新 spawn
-5. 所有 subagent 完成后,主 agent 统一检查跨知识点一致性(导航链接、前置依赖)
+3. **工作目录隔离(强制):** 每个 subagent 必须使用**绝对路径**写入产物,禁止相对路径。主 agent 在 spawn 时明确指定:
+   - 知识文件路径: `{project_abs_path}/knowledge/NN-title.md`
+   - 练习目录路径: `{project_abs_path}/exercises/NN-title/`
+   - 禁止在 subagent 内部 `cd` 或使用相对路径
+4. subagent 写完后用 `scripts/content-quality-check.py` + `scripts/render-check.py` 校验
+5. 失败的知识点单独标记,由主 agent 重试或重新 spawn
+6. **重试质量保障(强制):** 重试产出的文件必须通过与原任务相同的质量检查,且主 agent 对比两次产出的质量指标(注释密度、错误段数量),确保重试不降级
+7. 所有 subagent 完成后,主 agent 统一检查跨知识点一致性(导航链接、前置依赖)
 
 **教学法触发(v1.1 R3):**
 
