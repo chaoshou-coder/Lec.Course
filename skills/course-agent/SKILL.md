@@ -1,7 +1,7 @@
-# /course-agent — 课程生产单 agent
+# /course-agent — 课程生产多 agent 协作
 
-> 一个 agent 驱动课程生产的全流程:需求问答 → 知识依赖推理 → 按知识点制课 → 独立验收。
-> 状态机架构,软关卡 + 硬验收。
+> 一个主 agent 驱动课程生产的全流程:需求问答 → 知识依赖推理 → 并行制课 → 并行验收。
+> 状态机架构,软关卡 + 硬验收,用户选择并发度。
 
 ## 启动
 
@@ -19,9 +19,10 @@
 
 **执行:**
 1. 多轮 `ask_user` 敲定五要素:知识域、目的、深度、每日时长、验收标准
-2. 用 `web_search` 研究目标域(藤校课程优先),找到 2-3 门参照课程
-3. 验证用户设定的 depth_goal 是否合理
-4. 产出 `output/requirements.json`,用 `scripts/validate.py` 校验
+2. 询问并发度偏好(`build_parallelism` / `qa_parallelism`),见 BUILD/QA 段
+3. 用 `web_search` 研究目标域(藤校课程优先),找到 2-3 门参照课程
+4. 验证用户设定的 depth_goal 是否合理
+5. 产出 `output/requirements.json`(含 `parallelism` 字段),用 `scripts/validate.py` 校验
 
 **软关卡:** 产出后进 `AWAIT_CONFIRM`,向用户展示:
 - 终点能力定义
@@ -58,18 +59,30 @@
 
 ---
 
-### BUILD —— 按知识点顺序制课
+### BUILD —— 并行 spawn subagent 制课
 
 **参考:** `methodology/04-design-assessments.md`, `methodology/05-production-standards.md`
 
+**并发度(v1.4 新增):**
+
+用户在 DISCOVER 阶段选择 `build_parallelism`(并发 subagent 数):
+
+| 级别 | 并发数 | 适用场景 | 风险 |
+|------|--------|----------|------|
+| `single` | 1 | 小域(≤5 知识点)、调试模式 | 无并行风险,但慢 |
+| `moderate` | 3 | 中等域(6-15 知识点) | 推荐默认 |
+| `high` | 5 | 大域(>15 知识点) | 需要更多 token |
+| `max` | 不限制 | 超大域(>25 知识点) | token 消耗最大 |
+
 **执行:**
-1. 按 lesson_plan 的每个知识点顺序产出(单 agent,不并行)
-2. 每个知识点产出:
+1. 按 `build_parallelism` 将知识点分组,每组 spawn 一个 build subagent
+2. 每个 subagent 独立产出自己负责的知识点:
    - `knowledge/NN-title.md`(8 步趁热打铁笔记,含知识地图)
    - `exercises/NN-title/practice01-06.{ext}`(6 道当堂练)
    - `exercises/NN-title/task01-03.{ext}`(3 道课后作业)
-3. 每个知识点写完后用 `scripts/content-quality-check.py` + `scripts/render-check.py` 校验
-4. 失败的知识点单独标记,重试
+3. subagent 写完后用 `scripts/content-quality-check.py` + `scripts/render-check.py` 校验
+4. 失败的知识点单独标记,由主 agent 重试或重新 spawn
+5. 所有 subagent 完成后,主 agent 统一检查跨知识点一致性(导航链接、前置依赖)
 
 **教学法触发(v1.1 R3):**
 
@@ -110,16 +123,18 @@
 
 ---
 
-### QA —— 独立验收(同一 agent,不读 BUILD 上下文)
+### QA —— 并行 subagent 验收
 
 **执行:**
-1. QA 阶段由同一 agent 执行,但不读取 BUILD 产出的上下文(只看产物文件)
-2. QA 接收 `requirements.json` + `learning-plan.json` + 被审课程材料
-3. 双轨验收:
-   - **结构检查**(无需深领域知识): 所有产物文件存在、格式符合 `05-production-standards.md`
-   - **内容正确性**(需要领域推理): 对照 `acceptance_criteria` 判定是否达成目标
+1. 按 `qa_parallelism`(通常 = build_parallelism 或 -1)spawn 多个 QA subagent
+2. 每个 QA subagent 负责不同维度:
+   - **结构检查 subagent**(无需深领域知识): 所有产物文件存在、格式符合 `05-production-standards.md`
+   - **内容正确性 subagent**(需要领域推理): 对照 `acceptance_criteria` 判定是否达成目标
+   - **教学法对齐 subagent**: 检查 PLAN 的 pedagogy_notes 是否在 BUILD 中落地
+   - **学员视角 subagent**: 评估练习难度、类比可理解性、先修知识覆盖
+3. 每个 subagent 独立执行,不读取 BUILD 上下文(只看产物文件)
 4. 用 `scripts/content-quality-check.py` + `scripts/render-check.py` 校验知识文件
-5. 产出 `output/qa-report.json`,用 `scripts/validate.py` 校验
+5. 主 agent 汇总所有 subagent 发现,产出 `output/qa-report.json`,用 `scripts/validate.py` 校验
 
 **QA 跨阶段对照(v1.3 R12):**
 
@@ -168,8 +183,10 @@ agent 进入此状态时:
 
 ## 关键约束
 
-- **独立验收:** QA 阶段不读取 BUILD 上下文(只看产物文件)
+- **独立验收:** QA subagent 不读取 BUILD 上下文(只看产物文件)
+- **并行隔离:** 每个 build subagent 写到自己隔离的目录,无共享 mutable state
 - **硬关卡只有 QA:** 中间关卡都是软关卡(agent 主动征求确认)
 - **schema 校验:** 每个阶段的硬性产出必须通过 `scripts/validate.py`
 - **内容质量校验:** BUILD 产出必须通过 `scripts/content-quality-check.py` + `scripts/render-check.py`
 - **回退是显式的:** 由 `qa-report.recommended_action` 或用户指令触发,不靠 agent 自行决定
+- **工作日志:** 全流程记录到 `output/work-log.json`,追踪效率瓶颈(见 `methodology/07-work-logging.md`)

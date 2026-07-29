@@ -12,8 +12,9 @@ Lec.Course Markdown 渲染检查器。
     1. 标题层级跳跃(如 H1 直接到 H4)
     2. 重复标题(同一标题出现多次)
     3. 旧格式残留(# ============)
-    4. fenced block 不匹配(``` 没有闭合)
-    5. 特殊字符导致的渲染问题
+    4. Unicode box-drawing 字符(┌┐└┘│─▶等,应在 fenced block 内)
+    5. fenced block 不匹配(``` 没有闭合)
+    6. 特殊字符导致的渲染问题
 """
 
 import sys
@@ -133,6 +134,33 @@ def check_old_format_leftovers(text: str) -> dict:
     }
 
 
+def check_box_drawing(text: str) -> dict:
+    """检查是否使用了 Unicode box-drawing 字符(任何位置都不允许)
+
+    注意:即使 inside fenced block,Unicode box-drawing 也会导致对齐混乱,
+    因为不同渲染器(VS Code/GitHub/终端)对宽字符宽度处理不一致。
+    """
+    # Unicode 范围: U+2500-U+257F(box-drawing), U+2580-U+259F(block elements),
+    # U+25A0-U+25FF(geometric shapes), U+2190-U+21FF(arrows), U+25B2-U+25FE
+    box_pattern = re.compile(
+        r'[─-╿▀-▟■-◿←-⇿▲-◾]'
+    )
+
+    issues = []
+    lines = text.split('\n')
+
+    for i, line in enumerate(lines, 1):
+        matches = box_pattern.findall(line)
+        if matches:
+            unique = ''.join(sorted(set(matches))[:5])
+            issues.append(f"第{i}行: 使用了 {len(matches)} 个 Unicode box-drawing 字符({unique}),必须改用 plain ASCII(- | + = * # / \\ < > ( ) [ ])")
+
+    return {
+        'issues': issues,
+        'pass': len(issues) == 0
+    }
+
+
 def check_fenced_blocks(text: str) -> dict:
     """检查 fenced block 是否匹配(有开有关)"""
     opens = len(re.findall(r'^```', text, re.MULTILINE))
@@ -206,13 +234,14 @@ def check_file(filepath: Path) -> dict:
         'heading_hierarchy': check_heading_hierarchy(text),
         'duplicate_headings': check_duplicate_headings(text),
         'old_format': check_old_format_leftovers(text),
+        'box_drawing': check_box_drawing(text),
         'fenced_blocks': check_fenced_blocks(text),
         'rendered': check_rendered_output(text),
     }
 
     results['pass'] = all(
         results[k]['pass'] for k in ['heading_hierarchy', 'duplicate_headings',
-                                      'old_format', 'fenced_blocks', 'rendered']
+                                      'old_format', 'box_drawing', 'fenced_blocks', 'rendered']
     )
 
     return results

@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lec.Course 工作日志",
+  "description": "记录课程生产全流程的时间、决策、瓶颈,用于效率分析",
+  "type": "object",
+  "required": ["course_id", "started_at", "phases"],
+  "properties": {
+    "course_id": {
+      "type": "string",
+      "description": "课程唯一标识"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "流程开始时间"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "流程结束时间"
+    },
+    "total_duration_minutes": {
+      "type": "number",
+      "description": "总耗时(分钟)"
+    },
+    "parallelism": {
+      "type": "object",
+      "properties": {
+        "build_parallelism": {"type": "integer", "minimum": 1},
+        "qa_parallelism": {"type": "integer", "minimum": 1}
+      }
+    },
+    "phases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["phase", "started_at", "completed_at"],
+        "properties": {
+          "phase": {
+            "type": "string",
+            "enum": ["DISCOVER", "PLAN", "BUILD", "QA", "DONE"]
+          },
+          "started_at": {"type": "string", "format": "date-time"},
+          "completed_at": {"type": "string", "format": "date-time"},
+          "duration_minutes": {"type": "number"},
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["time", "type", "detail"],
+              "properties": {
+                "time": {"type": "string"},
+                "type": {"type": "string"},
+                "detail": {"type": "string"}
+              }
+            }
+          },
+          "decisions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["decision", "reason", "impact"],
+              "properties": {
+                "decision": {"type": "string"},
+                "reason": {"type": "string"},
+                "impact": {"type": "string"}
+              }
+            }
+          },
+          "bottlenecks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["issue", "cause"],
+              "properties": {
+                "issue": {"type": "string"},
+                "cause": {"type": "string"},
+                "fix_time_minutes": {"type": "number"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "total_subagents_spawned": {"type": "integer"},
+        "total_subagent_failures": {"type": "integer"},
+        "total_retry_count": {"type": "integer"},
+        "quality_issues_found": {"type": "integer"},
+        "quality_issues_fixed": {"type": "integer"}
+      }
+    }
+  }
+}

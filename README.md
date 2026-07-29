@@ -6,13 +6,13 @@
 
 一个 AI 驱动的课程生产框架,对标 gstack 的 skill 组合形态,但面向课程生产。
 
-你描述一个学习目标(比如"从零写一个 Web Scraping 工具"),单 agent 会:
+你描述一个学习目标(比如"从零写一个 Web Scraping 工具"),多 agent 协作会:
 
-1. **发现(DISCOVER)** —— 多轮问答敲定知识域、目的、深度、验收标准
+1. **发现(DISCOVER)** —— 多轮问答敲定知识域、目的、深度、验收标准 + 你选择并发度
 2. **规划(PLAN)** —— 扒知识依赖 DAG、拓扑排序、推理最小必要学习链
-3. **制课(BUILD)** —— 按知识点顺序产出每个知识点的自学材料 + 练习
-4. **验收(QA)** —— 独立验收(同一 agent,不读 BUILD 上下文)
-5. **交付(DONE)** —— 你拿到一门完整的自学课程产物
+3. **制课(BUILD)** —— 并行 spawn subagent 产出每个知识点的自学材料 + 练习
+4. **验收(QA)** —— 并行 spawn subagent 从多个维度验收(结构/内容/教学法/学员视角)
+5. **交付(DONE)** —— 你拿到一门完整的自学课程产物 + 工作日志(效率分析)
 
 ## 核心理念
 
@@ -34,24 +34,26 @@ cd Lec.Course
 Lec.Course/
 ├── CLAUDE.md                      # Claude Code 工作指南
 ├── README.md                      # 本文件
-├── methodology/                   # skill 方法论(按阶段组织)
+├── methodology/                   # skill 方法论(按阶段组织,01-07)
 │   ├── 01-discover-target-domain.md
 │   ├── 02-build-knowledge-dag.md
 │   ├── 03-design-learning-sequence.md
 │   ├── 04-design-assessments.md
 │   ├── 05-production-standards.md
-│   └── 06-subject-specific-patterns.md
+│   ├── 06-subject-specific-patterns.md
+│   └── 07-work-logging.md         # 工作日志与流程效率追踪
 ├── schemas/                       # 产物 schema(机器可校验)
-│   ├── requirements.schema.json
+│   ├── requirements.schema.json   #(含 parallelism 字段)
 │   ├── learning-plan.schema.json
-│   └── qa-report.schema.json
-├── scripts/
+│   ├── qa-report.schema.json
+│   └── work-log.schema.json       # 工作日志 schema(效率追踪)
+├── scripts/                       # 校验工具
 │   ├── validate.py                # schema 校验
-│   ├── content-quality-check.py   # 内容质量检查(结构 + 注释 + fenced block)
-│   ├── render-check.py            # 渲染检查(heading 层级 + 旧格式残留 + 零宽字符)
+│   ├── content-quality-check.py   # 内容质量(结构 + 注释 + fenced block + 问自己)
+│   ├── render-check.py            # 渲染检查(heading + 旧格式 + Unicode + 零宽字符)
 │   └── regression-check.py        # 防回归检查(文件后缀 + 8 步循环 + 练习标注)
 ├── output/                        # 迭代产出(测试用例,非交付物)
-│   ├── iteration-log.md           # 迭代日志(18 轮)
+│   ├── iteration-log.md           # 迭代日志(19 轮)
 │   └── <domain>/                  # 各测试域产出
 └── skills/
     └── course-agent/              # skill 入口

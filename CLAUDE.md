@@ -14,11 +14,11 @@ Lec.Course 是一个 AI 驱动的课程生产框架。用户描述学习目标,�
 
 ### 工作流程
 
-1. **DISCOVER** —— 多轮问答敲定知识域、目的、深度、验收标准 → 产出 `requirements.json`
+1. **DISCOVER** —— 多轮问答敲定知识域、目的、深度、验收标准 + 用户选择并发度 → 产出 `requirements.json`
 2. **PLAN** —— 扒知识依赖 DAG、拓扑排序、推理学习序列 → 产出 `learning-plan.json`
-3. **BUILD** —— 按知识点顺序制课 → 产出 `knowledge/` + `exercises/`
-4. **QA** —— 独立验收(同一 agent,不读 BUILD 上下文) → 产出 `qa-report.json`
-5. **DONE** —— 交付课程产物
+3. **BUILD** —— 并行 spawn subagent 制课(用户选择的并发度) → 产出 `knowledge/` + `exercises/`
+4. **QA** —— 并行 spawn subagent 验收(结构/内容/教学法/学员视角) → 产出 `qa-report.json`
+5. **DONE** —— 交付课程产物 + 工作日志(`work-log.json`)
 
 ### 产物结构
 
@@ -51,9 +51,9 @@ course-name/
 Lec.Course/
 ├── CLAUDE.md                      # 本文件
 ├── README.md                      # 项目入口
-├── methodology/                   # skill 方法论(按阶段组织)
-├── schemas/                       # 产物 schema
-├── scripts/                       # 校验工具
+├── methodology/                   # skill 方法论(按阶段组织,01-07)
+├── schemas/                       # 产物 schema(requirements/learning-plan/qa-report/work-log)
+├── scripts/                       # 校验工具(validate/content-quality/render/regression)
 └── skills/course-agent/           # skill 入口
     ├── SKILL.md                   # agent 执行逻辑
     └── state-machine.md           # 状态机架构
@@ -85,7 +85,13 @@ python scripts/regression-check.py path/to/course/
 - QA 验证渲染,不只是结构
 
 **验证双层机制:**
-- `content-quality-check.py` —— 结构检查(8 步循环、fenced block、注释密度)
-- `render-check.py` —— 渲染检查(heading 层级、重复标题、旧格式残留、零宽字符)
+- `content-quality-check.py` —— 结构检查(8 步循环、fenced block、注释密度、问自己段)
+- `render-check.py` —— 渲染检查(heading 层级、重复标题、旧格式残留、Unicode box-drawing、零宽字符)
 
-**迭代日志:** `output/iteration-log.md`(18 轮迭代记录,R1-R18)
+**并发度(用户选择):**
+- `build_parallelism` —— 1(single)/3(moderate)/5(high)/max
+- `qa_parallelism` —— 通常 = build_parallelism 或 -1
+
+**工作日志:** `output/work-log.json`(追踪时间、决策、瓶颈)
+
+**迭代日志:** `output/iteration-log.md`(19 轮迭代记录,R1-R19)

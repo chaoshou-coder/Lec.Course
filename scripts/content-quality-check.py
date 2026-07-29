@@ -14,6 +14,7 @@ Lec.Course 内容质量检查器(v1.2)。
     3. 知识点后练习: 每个主要知识点后是否有学员练习区
     4. 常见错误: 是否包含具体错误信息(如 `Error:` 或 `错误`)
     5. 代码注释密度: 代码块内是否有足够的行注释
+    6. 苏格拉底引导: 每个知识点是否有"问自己"段(≥3 个问题)
 
 示例:
     python scripts/content-quality-check.py output/lec-python-v2/knowledge/
@@ -236,6 +237,28 @@ def check_code_comments(text: str) -> dict:
     }
 
 
+def check_socratic_questions(text: str) -> dict:
+    """检查每个知识点是否有'问自己'引导段(≥3 个问题)"""
+    # 查找"问自己"段
+    has_socratic = '问自己' in text
+
+    # 统计引导问题数量(> 开头的编号列表项)
+    question_pattern = re.compile(r'^>\s+\d+\.\s+\*\*')
+    questions = question_pattern.findall(text)
+
+    # 也匹配 "> **问自己:**" 后的编号问题
+    question_pattern2 = re.compile(r'^>\s+\d+\.')
+    questions2 = question_pattern2.findall(text)
+
+    total_questions = max(len(questions), len(questions2))
+
+    return {
+        'has_socratic_section': has_socratic,
+        'question_count': total_questions,
+        'pass': has_socratic and total_questions >= 3
+    }
+
+
 def check_knowledge_file(filepath: Path) -> dict:
     """检查单个知识点文件"""
     text = filepath.read_text(encoding='utf-8')
@@ -256,12 +279,14 @@ def check_knowledge_file(filepath: Path) -> dict:
         'error_messages': check_error_messages(text),
         'code_comments': check_code_comments(text),
         'code_fenced': check_code_fenced(text),
+        'socratic_questions': check_socratic_questions(text),
     }
 
     # 总体是否通过
     results['pass'] = all(
         results[k]['pass'] for k in ['numbered_steps', 'break_it', 'student_practice',
-                                      'error_messages', 'code_comments', 'code_fenced']
+                                      'error_messages', 'code_comments', 'code_fenced',
+                                      'socratic_questions']
     )
 
     return results
@@ -324,6 +349,9 @@ def check_knowledge_path(knowledge_path: str) -> int:
                         if check_result.get('bare_examples'):
                             detail += f", 示例: {check_result['bare_examples'][:2]}"
                         detail += ")"
+                    elif check_name == 'socratic_questions':
+                        detail = f"(问自己段: {'有' if check_result['has_socratic_section'] else '无'}, "
+                        detail += f"问题数: {check_result['question_count']},需要 ≥3)"
 
                     print(f"   ❌ {check_name}: 未通过 {detail}")
                     errors.append(f"{md_file.name} -> {check_name}")

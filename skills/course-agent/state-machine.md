@@ -7,10 +7,10 @@
 | 状态 | 职责 | 可调工具 |
 |---|---|---|
 | `IDLE` | agent 已加载,无活跃任务 | `ask_user`(启动) |
-| `DISCOVER` | 需求问答 + 研究目标域 | `web_search`, `ask_user`, `read_reference` |
+| `DISCOVER` | 需求问答 + 研究目标域 + 选择并发度 | `web_search`, `ask_user`, `read_reference` |
 | `PLAN` | 扒知识依赖 DAG + 推理学习路径 | `build_dag`, `topological_sort`, `research_dependencies`, `prune` |
-| `BUILD` | 按知识点顺序制课 | `write_file`, `validate_schema`, `content_quality_check`, `render_check` |
-| `QA` | 独立验收(不读 BUILD 上下文) | `read_artifacts`, `validate_schema`, `content_quality_check`, `render_check` |
+| `BUILD` | 并行 spawn subagent 制课 | `spawn_build_subagent`, `write_file`, `validate_schema`, `content_quality_check`, `render_check` |
+| `QA` | 并行 spawn subagent 验收 | `spawn_qa_subagent`, `read_artifacts`, `validate_schema`, `content_quality_check`, `render_check` |
 | `AWAIT_CONFIRM` | 软关卡:等待用户确认转移 | `ask_user`(approve / reject / revise) |
 | `DONE` | 全部通过,课程产出完成 | 无(终态) |
 
@@ -80,7 +80,8 @@
 
 | 阶段 | 状态机态 | 方法论文档 |
 |------|---------|-----------|
-| 需求问答 + 研究 | DISCOVER | `methodology/01-discover-target-domain.md` |
+| 需求问答 + 研究 + 并发度选择 | DISCOVER | `methodology/01-discover-target-domain.md` |
 | DAG + 学习路径 | PLAN | `methodology/02-build-knowledge-dag.md`, `methodology/03-design-learning-sequence.md` |
-| 按知识点制课 | BUILD | `methodology/04-design-assessments.md`, `methodology/05-production-standards.md` |
-| 独立验收 | QA | 对照 `requirements.json` acceptance_criteria |
+| 并行制课 | BUILD | `methodology/04-design-assessments.md`, `methodology/05-production-standards.md` |
+| 并行验收 | QA | 对照 `requirements.json` acceptance_criteria |
+| 工作日志 | 全流程 | `methodology/07-work-logging.md` |
