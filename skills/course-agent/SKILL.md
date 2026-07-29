@@ -18,11 +18,17 @@
 **参考:** `methodology/01-discover-target-domain.md`
 
 **执行:**
-1. 多轮 `ask_user` 敲定五要素:知识域、目的、深度、每日时长、验收标准
-2. 询问并发度偏好(`build_parallelism` / `qa_parallelism`),见 BUILD/QA 段
-3. 用 `web_search` 研究目标域(藤校课程优先),找到 2-3 门参照课程
-4. 验证用户设定的 depth_goal 是否合理
-5. 产出 `output/requirements.json`(含 `parallelism` 字段),用 `scripts/validate.py` 校验
+1. **深挖具体目的**(按顺序五问):
+   - Q1: 你要做什么东西?(从抽象→具体)
+   - Q2: 做给谁看/用?(受众)
+   - Q3: 解决你什么痛点?(真实动机,**最关键**——答不出来回到 Q1)
+   - Q4: 什么时候要完成?(时间约束)
+   - Q5: 做好了长什么样?(可视化成功标准)
+2. 多轮 `ask_user` 敲定其他要素:学员画像、深度、每日时长、验收标准
+3. 询问并发度偏好(`build_parallelism` / `qa_parallelism`),见 BUILD/QA 段
+4. 用 `web_search` 研究目标域(藤校课程优先),找到 2-3 门参照课程
+5. 验证用户设定的 depth_goal 是否合理
+6. 产出 `output/requirements.json`(含 `specific_purpose` + `parallelism`),用 `scripts/validate.py` 校验
 
 **软关卡:** 产出后进 `AWAIT_CONFIRM`,向用户展示:
 - 终点能力定义

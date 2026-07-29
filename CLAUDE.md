@@ -14,7 +14,7 @@ Lec.Course 是一个 AI 驱动的课程生产框架。用户描述学习目标,�
 
 ### 工作流程
 
-1. **DISCOVER** —— 多轮问答敲定知识域、目的、深度、验收标准 + 用户选择并发度 → 产出 `requirements.json`
+1. **DISCOVER** —— 深挖具体目的(五问) + 学员画像 + 验收标准 + 用户选择并发度 → 产出 `requirements.json`(含 `specific_purpose`)
 2. **PLAN** —— 扒知识依赖 DAG、拓扑排序、推理学习序列 → 产出 `learning-plan.json`
 3. **BUILD** —— 并行 spawn subagent 制课(用户选择的并发度) → 产出 `knowledge/` + `exercises/`
 4. **QA** —— 并行 spawn subagent 验收(结构/内容/教学法/学员视角) → 产出 `qa-report.json`

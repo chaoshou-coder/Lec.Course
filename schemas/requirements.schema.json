@@ -3,7 +3,7 @@
   "title": "requirements.schema",
   "description": "DISCOVER 态产出:课程需求定义,由 /course-discover 生成",
   "type": "object",
-  "required": ["target_capability", "current_level", "daily_hours", "depth_goal", "acceptance_criteria", "research_grounded", "learner_persona", "topic_type"],
+  "required": ["target_capability", "current_level", "daily_hours", "depth_goal", "acceptance_criteria", "research_grounded", "learner_persona", "topic_type", "specific_purpose"],
   "properties": {
     "target_capability": {
       "type": "string",
@@ -98,6 +98,38 @@
       "type": "array",
       "description": "明确不在 v1 范围的能力(从 target_capability 收敛后剩下的)",
       "items": { "type": "string" }
+    },
+    "specific_purpose": {
+      "type": "object",
+      "description": "具体目的:深挖五问的结果(what/who/why/deadline/success_looks_like)",
+      "required": ["what", "who", "why", "success_looks_like"],
+      "properties": {
+        "what": {
+          "type": "string",
+          "description": "具体做什么东西(从抽象→具体)",
+          "minLength": 5
+        },
+        "who": {
+          "type": "string",
+          "description": "做给谁看/用(受众)",
+          "minLength": 3
+        },
+        "why": {
+          "type": "string",
+          "description": "解决什么痛点(真实动机)",
+          "minLength": 10
+        },
+        "deadline": {
+          "type": "string",
+          "description": "什么时候要完成(时间约束)"
+        },
+        "success_looks_like": {
+          "type": "string",
+          "description": "做好了长什么样(可视化成功标准)",
+          "minLength": 10
+        }
+      },
+      "additionalProperties": false
     },
     "parallelism": {
       "type": "object",
