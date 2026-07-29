@@ -64,6 +64,24 @@ Lec.Course/
 # schema 校验
 python scripts/validate.py schemas/requirements.schema.json path/to/requirements.json
 
-# 内容质量检查(跨语言/跨学科)
+# 内容质量检查(结构 + 注释 + fenced block)
 python scripts/content-quality-check.py path/to/knowledge/
+
+# 渲染检查(heading 层级 + 重复标题 + 旧格式残留 + 零宽字符)
+python scripts/render-check.py path/to/knowledge/
 ```
+
+## Skill 迭代方法论
+
+**Micro-Cycle Build-Measure-Learn:**
+- 每轮 = 一个能力点 × 一个测试用例
+- 测试用例是探针,不是交付物
+- 改进落在 skill 上(方法论文档/SKILL.md/schema),不是课程文件
+- 修复必须泛化到所有域,不能针对特定域
+- QA 验证渲染,不只是结构
+
+**验证双层机制:**
+- `content-quality-check.py` —— 结构检查(8 步循环、fenced block、注释密度)
+- `render-check.py` —— 渲染检查(heading 层级、重复标题、旧格式残留、零宽字符)
+
+**迭代日志:** `output/iteration-log.md`(17 轮迭代记录)

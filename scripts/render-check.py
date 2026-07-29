@@ -28,23 +28,28 @@ except ImportError:
 
 
 def check_heading_hierarchy(text: str) -> dict:
-    """检查标题层级是否正确(H1 > H2 > H3 > H4,不跳跃),跳过 fenced block"""
+    """检查标题层级是否正确,跳过 fenced block(代码块内的 # 注释不是标题)"""
     headings = []
     lines = text.split('\n')
     in_fenced = False
 
     for line in lines:
         # 跳过 fenced block 的边界
-        if line.strip().startswith('```'):
+        stripped = line.strip()
+        if stripped.startswith('```'):
             in_fenced = not in_fenced
             continue
         if in_fenced:
             continue
 
-        match = re.match(r'^(#{1,6})\s+(.+)$', line.strip())
+        # 只匹配真正的 markdown 标题(# 后面有空格)
+        match = re.match(r'^(#{1,6})\s+(.+)$', stripped)
         if match:
             level = len(match.group(1))
             title = match.group(2).strip()
+            # 跳过纯注释行(如 # --- 执行过程 ---)
+            if title.startswith('---') or title.startswith('==='):
+                continue
             headings.append((level, title))
 
     issues = []
@@ -99,26 +104,28 @@ def check_duplicate_headings(text: str) -> dict:
 
 
 def check_old_format_leftovers(text: str) -> dict:
-    """检查旧格式残留"""
+    """检查旧格式残留(跳过 fenced block)"""
     issues = []
-
-    # 旧格式 1: # ============ 标题 ============
-    old_format_1 = re.findall(r'^# =+\s*.+\s*=+$', text, re.MULTILINE)
-    if old_format_1:
-        issues.extend([f"旧格式残留(H1+等号): '{line}'" for line in old_format_1])
-
-    # 旧格式 2: # 作为代码注释(不在 fenced block 内)
     lines = text.split('\n')
     in_fenced = False
+
     for i, line in enumerate(lines, 1):
+        # 跳过 fenced block 的边界
         if line.strip().startswith('```'):
             in_fenced = not in_fenced
             continue
         if in_fenced:
             continue
-        # 检查是否看起来像代码注释(以 # 开头,后面是代码)
-        if re.match(r'^#\s*(import |from |def |class |print\(|html =|response =)', line):
-            issues.append(f"第{i}行: 裸露的代码注释 '{line.strip()[:50]}'")
+
+        stripped = line.strip()
+
+        # 旧格式 1: # ============ 标题 ============
+        if re.match(r'^# =+\s*.+\s*=+$', stripped):
+            issues.append(f"旧格式残留(H1+等号): '{stripped}'")
+
+        # 旧格式 2: # 作为代码注释(不在 fenced block 内)
+        if re.match(r'^#\s*(import |from |def |class |print\(|html =|response =)', stripped):
+            issues.append(f"第{i}行: 裸露的代码注释 '{stripped[:50]}'")
 
     return {
         'issues': issues,

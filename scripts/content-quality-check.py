@@ -162,6 +162,9 @@ def check_code_fenced(text: str) -> dict:
             # 排除定义性文字(如 **HTML = 超文本标记语言**)
             if stripped.startswith('**') and '**' in stripped[2:]:
                 continue
+            # 排除中文描述(包含中文字符的行通常不是代码)
+            if re.search(r'[一-鿿]', stripped):
+                continue
             bare_lines += 1
             if len(bare_examples) < 3:
                 bare_examples.append(stripped[:50])
