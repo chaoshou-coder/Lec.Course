@@ -46,23 +46,25 @@
 **参考:** `methodology/02-build-knowledge-dag.md`, `methodology/03-design-learning-sequence.md`
 
 **执行:**
-1. 用**倒推三步法**从终点能力反推知识链条:
-   - Step 1: 写出终点能力的直接前置
-   - Step 2: 递归展开每个前置,直到原子知识
-   - Step 3: 合并成 DAG,做拓扑排序
-2. 用参照课程验证 DAG 正确性(gold-set 对比)
-3. 应用三大编排原则(工具先行/脚手架递进/螺旋复访)
-4. 按 daily_hours 编排每日 lesson_plan,溢出则拆分(标记 parallelism_broken)
-5. 剪掉从终点能力不可达的枝,记录到 pruned_branches
-6. 产出 `output/learning-plan.json`,用 `scripts/validate.py` 校验
+1. 进入 **Plan Mode**(使用 agent harness 的原生规划模式):
+   - **Claude Code:** 调用 `EnterPlanMode`,在 plan 文件中设计 DAG 和编排
+   - **Codex:** 使用其 built-in planning 功能(生成 plan.md 供用户审批)
+   - **pi agent:** 使用其 task decomposition 模式
+   - **zcode:** 使用其 plan mode
+2. 在 Plan Mode 内完成:
+   - 用**倒推三步法**从终点能力反推知识链条
+   - 用参照课程验证 DAG 正确性(gold-set 对比)
+   - 应用三大编排原则(工具先行/脚手架递进/螺旋复访)
+   - 按 daily_hours 编排每日 lesson_plan
+   - 剪掉从终点能力不可达的枝,记录到 pruned_branches
+3. 产出 plan 文件,向用户展示:
+   - DAG 节点数和层数
+   - 学习天数和每日时长
+   - 被剪掉的枝(让用户决定是否需要补回)
+   - 请用户 approve / reject / revise
+4. 用户 approve 后,退出 Plan Mode,产出 `output/learning-plan.json`,用 `scripts/validate.py` 校验
 
-**软关卡:** 产出后进 `AWAIT_CONFIRM`,向用户展示:
-- DAG 节点数和层数
-- 学习天数和每日时长
-- 被剪掉的枝(让用户决定是否需要补回)
-- 请用户 approve / reject / revise
-
-**转移:** approve → `BUILD`; reject/revise → 回 `PLAN` 调整
+**转移:** approve → `BUILD`; reject/revise → 留在 Plan Mode 调整
 
 ---
 
