@@ -139,13 +139,11 @@
         "build_parallelism": {
           "type": "integer",
           "minimum": 1,
-          "maximum": 10,
           "description": "BUILD 阶段并发 subagent 数"
         },
         "qa_parallelism": {
           "type": "integer",
           "minimum": 1,
-          "maximum": 5,
           "description": "QA 阶段并发 subagent 数"
         }
       },
