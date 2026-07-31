@@ -82,6 +82,17 @@
         }
       }
     },
+    "search_failure_handling": {
+      "type": "object",
+      "description": "搜索失败处理记录:必须记录是否发生搜索失败、如何处理、是否询问用户",
+      "properties": {
+        "occurred": {"type": "boolean"},
+        "tool": {"type": "string"},
+        "reason": {"type": "string"},
+        "user_asked": {"type": "boolean"},
+        "user_decision": {"type": "string", "enum": ["provide_reference", "skip_research", "other"]}
+      }
+    },
     "summary": {
       "type": "object",
       "properties": {
